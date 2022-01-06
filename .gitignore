@@ -1,0 +1,14 @@
+# User configuration
+src/resources/config.h
+
+# Local dev stuff
+/local
+
+# VSCode preferences
+.vscode
+
+# PlatformIO stuff
+.pio
+
+# Hardware folder not ready yet (will include it later)
+hardware/
