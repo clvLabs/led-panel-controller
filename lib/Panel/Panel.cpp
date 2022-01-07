@@ -4,7 +4,9 @@
 
 Panel::Panel()
 : miLevel(0)
-{}
+{
+  setLevel(miLevel);
+}
 
 Panel::~Panel() {}
 
