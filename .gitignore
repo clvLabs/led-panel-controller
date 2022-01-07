@@ -1,5 +1,5 @@
 # User configuration
-src/resources/config.h
+lib/Config/Config.h
 
 # Local dev stuff
 /local
