@@ -16,10 +16,10 @@ Once the project is cloned, copy `lib/Config/Config.sample.h` as `lib/Config/Con
 #define WIFI_PASSWORD  "my-password"
 
 // ID of the LED panel (for multiple panel setups)
-#define LEDPANEL_ID  "1"
+#define PANEL_ID  "1"
 
 // MDNS settings
-#define MDNS_NAME    "led-panel-" LEDPANEL_ID
+#define MDNS_NAME    "led-panel-" PANEL_ID
 #define MDNS_NETWORK "local"
 
 // Web server settings
@@ -42,7 +42,7 @@ Once the project is cloned, copy `lib/Config/Config.sample.h` as `lib/Config/Con
 * `WIFI_PASSWORD`: Password to connect to the network.
 
 #### ID of the LED panel (for multiple panel setups)
-* `LEDPANEL_ID`: Id of the panel (alphanumeric).
+* `PANEL_ID`: Id of the panel (alphanumeric).
 
 #### MDNS settings
 * `MDNS_NAME`: Name for this device in the network.
