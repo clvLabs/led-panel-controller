@@ -20,9 +20,9 @@ void Panel::setLevel(uint8_t level) {
   miLevel = level;
 
   if (level == 0) {
-    mRelay.setState(false);
+    mRelay.off();
   } else {
-    mRelay.setState(true);
+    mRelay.on();
   }
 
   mDimmer.setLevel(level);

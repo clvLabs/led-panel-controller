@@ -6,25 +6,54 @@ Relay::Relay()
 : miSetPin(RELAY_SET_PIN)
 , miRstPin(RELAY_RST_PIN)
 , mbOn(false)
+, mbCoilActive(false)
+, miCoilActivationTime(0)
 {
   pinMode(miSetPin, OUTPUT);
   pinMode(miRstPin, OUTPUT);
+
+  _off();
 }
 
 Relay::~Relay() {}
 
-void Relay::loop() {}
+void Relay::loop() {
+  _checkCoil();
+}
 
-void Relay::setState(bool on) {
-  if (on != mbOn) {
+void Relay::on() {
+  if (!mbOn)
+    _on();
+}
 
-    if (on) {
-      digitalWrite(miSetPin, HIGH);
-      digitalWrite(miRstPin, LOW);
-    } else {
+void Relay::off() {
+  if (mbOn)
+    _off();
+}
+
+void Relay::_checkCoil() {
+  if (mbCoilActive) {
+    uint32_t elapsed = millis() - miCoilActivationTime;
+    if (elapsed >= RELAY_COIL_ACTIVATION_TIME) {
       digitalWrite(miSetPin, LOW);
-      digitalWrite(miRstPin, HIGH);
+      digitalWrite(miRstPin, LOW);
+      mbCoilActive = false;
     }
   }
-  mbOn = on;
+}
+
+void Relay::_on() {
+  digitalWrite(miSetPin, HIGH);
+  digitalWrite(miRstPin, LOW);
+  mbOn = true;
+  mbCoilActive = true;
+  miCoilActivationTime = millis();
+}
+
+void Relay::_off() {
+  digitalWrite(miSetPin, LOW);
+  digitalWrite(miRstPin, HIGH);
+  mbOn = false;
+  mbCoilActive = true;
+  miCoilActivationTime = millis();
 }

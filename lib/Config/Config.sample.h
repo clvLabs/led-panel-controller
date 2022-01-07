@@ -30,6 +30,9 @@
 #define RELAY_SET_PIN (4)
 #define RELAY_RST_PIN (5)
 
+// Relay coil activation time(ms) (see relay datasheet)
+#define RELAY_COIL_ACTIVATION_TIME (40)
+
 // PWM DIM pin
 #define PWM_DIM_PIN (14)
 
