@@ -19,15 +19,15 @@
 #define WEB_SERVER_PORT (80)
 
 // Status LED pin
-#define STATUSLED_PIN (LED_BUILTIN)
-#define STATUSLED_INVERTED (true)
+#define STATUSLED_PIN (12)
+#define STATUSLED_INVERTED (false)
 
 // Relay coil pins
 #define RELAY_SET_PIN (4)
 #define RELAY_RST_PIN (5)
 
 // PWM DIM pin
-#define PWM_DIM_PIN (0)
+#define PWM_DIM_PIN (14)
 
 // PWM settings
 #define PWM_MIN_VALUE (26)
