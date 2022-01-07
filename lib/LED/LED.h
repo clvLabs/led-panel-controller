@@ -6,25 +6,25 @@ public:
   LED();
   ~LED();
 
-  void setup(int pin, bool inverse=false);
+  void setup(uint8_t pin, bool inverse=false);
   void loop();
 
   void on();
   void off();
 
-  void blink(unsigned long onTime, unsigned long offTime);
+  void blink(uint32_t onTime, uint32_t offTime);
 
 private:
   void _on();
   void _off();
 
-  int miPin;
+  uint8_t miPin;
   bool mbInverseLogic;
-  int miLowValue;
-  int miHighValue;
+  uint8_t miLowValue;
+  uint8_t miHighValue;
   bool mbLEDIsOn;
   bool mbBlinking;
-  unsigned long miOnTime;
-  unsigned long miOffTime;
-  unsigned long miLastLEDStateChange;
+  uint32_t miOnTime;
+  uint32_t miOffTime;
+  uint32_t miLastLEDStateChange;
 };

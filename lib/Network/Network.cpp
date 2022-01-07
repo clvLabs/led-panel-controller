@@ -13,7 +13,7 @@ Network::~Network()
 
 void Network::start() {
   Serial.println(" Starting network");
-  unsigned long startTime = millis();
+  uint32_t startTime = millis();
   WiFi.mode(WIFI_STA);
   WiFi.setAutoConnect(true);
   WiFi.begin(WIFI_SSID, WIFI_PASSWORD);
@@ -35,7 +35,7 @@ void Network::start() {
 
     status = WiFi.status();
   }
-  unsigned long endTime = millis();
+  uint32_t endTime = millis();
 
   Serial.print("- Connected to ");
   Serial.print(WIFI_SSID);

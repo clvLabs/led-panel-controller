@@ -16,12 +16,12 @@ public:
   void loop();
 
 private:
-  void onWebServerChangeLevel(unsigned short level);
+  void onWebServerChangeLevel(uint8_t level);
 
   StatusLED statusLED;
   Network network;
   WebServer webServer;
   Panel panel;
 
-  unsigned short miLevel;
+  uint8_t miLevel;
 };

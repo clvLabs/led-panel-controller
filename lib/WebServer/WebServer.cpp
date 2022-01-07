@@ -69,7 +69,7 @@ void WebServer::handleHome() {
   mServer.send(200, "text/html", page);
 }
 
-void WebServer::handlePresetLevel(unsigned short level) {
+void WebServer::handlePresetLevel(uint8_t level) {
   if (onChangeLevel)
     onChangeLevel(level);
   sendRedirect();
@@ -79,7 +79,7 @@ void WebServer::handleLevel() {
   for (uint8_t i = 0; i < mServer.args(); i++) {
     if (mServer.argName(i) == "level") {
       if (onChangeLevel) {
-        unsigned int level = (unsigned int) mServer.arg(i).toInt();
+        uint8_t level = (uint8_t) mServer.arg(i).toInt();
         onChangeLevel(level);
       }
       sendRedirect();

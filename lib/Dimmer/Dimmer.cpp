@@ -13,13 +13,13 @@ Dimmer::~Dimmer() {}
 
 void Dimmer::loop() {}
 
-void Dimmer::setLevel(unsigned short level) {
+void Dimmer::setLevel(uint8_t level) {
   if (level > 100)
     level = 100;
 
   miLevel = level;
 
-  int pwmLevel = 0;
+  uint8_t pwmLevel = 0;
 
   if (miLevel)
     pwmLevel = PWM_MIN_VALUE + ((PWM_MAX_VALUE - PWM_MIN_VALUE) * miLevel / 100);

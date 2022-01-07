@@ -13,7 +13,7 @@ void Panel::loop() {
   mDimmer.loop();
 }
 
-void Panel::setLevel(unsigned short level) {
+void Panel::setLevel(uint8_t level) {
   if (level > 100)
     level = 100;
 

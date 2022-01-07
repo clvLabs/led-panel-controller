@@ -8,7 +8,7 @@ StatusLED::StatusLED()
 
 StatusLED::~StatusLED() {}
 
-void StatusLED::setup(int pin, bool inverseLogic) {
+void StatusLED::setup(uint8_t pin, bool inverseLogic) {
   miPin = pin;
   mbInverseLogic = inverseLogic;
   mLED.setup(pin, inverseLogic);

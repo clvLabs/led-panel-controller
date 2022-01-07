@@ -5,7 +5,7 @@
 class WebServer
 {
 public:
-  std::function< void(unsigned short) > onChangeLevel;
+  std::function< void(uint8_t) > onChangeLevel;
 
   WebServer();
   ~WebServer();
@@ -20,7 +20,7 @@ private:
   void handleIndexCSS();
 
   void handleHome();
-  void handlePresetLevel(unsigned short level);
+  void handlePresetLevel(uint8_t level);
   void handleLevel();
   void handleDefault();
 

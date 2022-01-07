@@ -15,7 +15,7 @@ LED::LED()
 
 LED::~LED() {}
 
-void LED::setup(int pin, bool inverseLogic) {
+void LED::setup(uint8_t pin, bool inverseLogic) {
   miPin = pin;
   mbInverseLogic = inverseLogic;
   pinMode(miPin, OUTPUT);
@@ -30,7 +30,7 @@ void LED::setup(int pin, bool inverseLogic) {
 
 void LED::loop() {
   if (mbBlinking) {
-      unsigned long elapsed = millis() - miLastLEDStateChange;
+      uint32_t elapsed = millis() - miLastLEDStateChange;
 
       if (mbLEDIsOn && elapsed > miOnTime) {
         _off();
@@ -51,7 +51,7 @@ void LED::off() {
   mbBlinking = false;
 }
 
-void LED::blink(unsigned long onTime, unsigned long offTime) {
+void LED::blink(uint32_t onTime, uint32_t offTime) {
   miOnTime = onTime;
   miOffTime = offTime;
   mbBlinking = true;

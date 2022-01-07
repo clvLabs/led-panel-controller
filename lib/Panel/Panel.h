@@ -11,10 +11,10 @@ public:
 
   void loop();
 
-  void setLevel(unsigned short level);
+  void setLevel(uint8_t level);
 
 private:
   Relay mRelay;
   Dimmer mDimmer;
-  unsigned short miLevel;
+  uint8_t miLevel;
 };

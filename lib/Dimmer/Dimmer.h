@@ -8,9 +8,9 @@ public:
 
   void loop();
 
-  void setLevel(unsigned short level);
+  void setLevel(uint8_t level);
 
 private:
-  int miPin;
-  unsigned short miLevel;
+  uint8_t miPin;
+  uint8_t miLevel;
 };

@@ -11,7 +11,7 @@ public:
   void setState(bool on);
 
 private:
-  int miSetPin;
-  int miRstPin;
+  uint8_t miSetPin;
+  uint8_t miRstPin;
   bool mbOn;
 };

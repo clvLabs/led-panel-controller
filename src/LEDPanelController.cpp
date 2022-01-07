@@ -9,7 +9,7 @@ LEDPanelController::LEDPanelController()
 LEDPanelController::~LEDPanelController()
 {}
 
-void LEDPanelController::onWebServerChangeLevel(unsigned short level) {
+void LEDPanelController::onWebServerChangeLevel(uint8_t level) {
   miLevel = level;
   panel.setLevel(miLevel);
 }
