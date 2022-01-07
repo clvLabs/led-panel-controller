@@ -14,10 +14,15 @@ Dimmer::~Dimmer() {}
 void Dimmer::loop() {}
 
 void Dimmer::setLevel(unsigned short level) {
-  if (level < PWM_MIN_VALUE)
-    level = 0;
+  if (level > 100)
+    level = 100;
 
   miLevel = level;
 
-  analogWrite(miPin, miLevel);
+  int pwmLevel = 0;
+
+  if (miLevel)
+    pwmLevel = PWM_MIN_VALUE + ((PWM_MAX_VALUE - PWM_MIN_VALUE) * miLevel / 100);
+
+  analogWrite(miPin, pwmLevel);
 }

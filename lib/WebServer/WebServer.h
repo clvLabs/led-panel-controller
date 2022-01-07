@@ -13,16 +13,16 @@ public:
   void start();
   void loop();
 
-  void sendResultPage();
   void sendRedirect();
 
 private:
-  void handleRoot();
-  void handleFast();
-  void handleNormal();
-  void handleSlow();
-  void handleIndexCSS();
   void handleNotFound();
+  void handleIndexCSS();
+
+  void handleHome();
+  void handlePresetLevel(unsigned short level);
+  void handleLevel();
+  void handleDefault();
 
   ESP8266WebServer mServer;
 };

@@ -15,12 +15,16 @@ void LEDPanelController::onWebServerChangeLevel(unsigned short level) {
 }
 
 void LEDPanelController::setup() {
+  miLevel = PANEL_DEFAULT_LEVEL;
+  panel.setLevel(miLevel);
+
   statusLED.setup(STATUSLED_PIN, STATUSLED_INVERTED);
+  statusLED.connecting();
 
   Serial.begin(9600);
   delay(100);
   Serial.println("\n\n\n");
-  Serial.println(" led-panel-controller - LED panel #" LEDPANEL_ID);
+  Serial.println(" led-panel-controller - LED panel #" PANEL_ID);
   Serial.println("-------------------------------------");
 
   network.start();
@@ -28,9 +32,8 @@ void LEDPanelController::setup() {
   webServer.onChangeLevel = std::bind(&LEDPanelController::onWebServerChangeLevel, this, std::placeholders::_1);
   webServer.start();
 
-  onWebServerChangeLevel(80);
-
   Serial.println("- Listening");
+  statusLED.listening();
 }
 
 void LEDPanelController::loop() {

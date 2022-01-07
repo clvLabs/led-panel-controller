@@ -7,7 +7,9 @@
 #define WIFI_PASSWORD  "my-password"
 
 // ID of the LED panel (for multiple panel setups)
-#define LEDPANEL_ID  "1"
+
+// Default light level for this panel at startup (0-100%)
+#define PANEL_DEFAULT_LEVEL  (100)
 
 // MDNS settings
 #define MDNS_NAME    "led-panel-" LEDPANEL_ID

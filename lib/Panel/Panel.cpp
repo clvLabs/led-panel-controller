@@ -14,9 +14,12 @@ void Panel::loop() {
 }
 
 void Panel::setLevel(unsigned short level) {
+  if (level > 100)
+    level = 100;
+
   miLevel = level;
 
-  if (level < PWM_MIN_VALUE) {
+  if (level == 0) {
     mRelay.setState(false);
   } else {
     mRelay.setState(true);

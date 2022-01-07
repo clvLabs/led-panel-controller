@@ -11,12 +11,19 @@ WebServer::~WebServer()
 {}
 
 void WebServer::start() {
-  mServer.on("/", std::bind(&WebServer::handleRoot, this));
-  mServer.on("/index.css", std::bind(&WebServer::handleIndexCSS, this));
-  mServer.on("/normal", std::bind(&WebServer::handleNormal, this));
-  mServer.on("/fast", std::bind(&WebServer::handleFast, this));
-  mServer.on("/slow", std::bind(&WebServer::handleSlow, this));
   mServer.onNotFound(std::bind(&WebServer::handleNotFound, this));
+  mServer.on("/index.css", std::bind(&WebServer::handleIndexCSS, this));
+
+  mServer.on("/", std::bind(&WebServer::handleHome, this));
+
+  mServer.on("/on", std::bind(&WebServer::handlePresetLevel,  this, 100));
+  mServer.on("/off", std::bind(&WebServer::handlePresetLevel, this, 0));
+  mServer.on("/lo", std::bind(&WebServer::handlePresetLevel,  this, 1));
+  mServer.on("/med", std::bind(&WebServer::handlePresetLevel, this, 50));
+  mServer.on("/hi", std::bind(&WebServer::handlePresetLevel,  this, 100));
+
+  mServer.on("/level", std::bind(&WebServer::handleLevel, this));
+  mServer.on("/default", std::bind(&WebServer::handleDefault, this));
 
   mServer.begin(WEB_SERVER_PORT);
   Serial.print("- Web server started on port ");
@@ -27,30 +34,6 @@ void WebServer::loop() {
   mServer.handleClient();
 }
 
-void WebServer::sendResultPage() {
-  String page = "";
-
-  page += "<head>";
-  page += "<link rel=stylesheet type=text/css href=\"/index.css\">";
-  page += "</head>";
-  page += "<body>";
-  page += "<h1>led-panel-controller</h1>";
-  page += "<h2>LED panel #" LEDPANEL_ID "</h2>";
-  // page += MDNS_NAME "." MDNS_NETWORK " @ " + network.localIP().toString();
-  page += "<p>";
-  page += "Active LED mode: <b>";
-  // page += pwmMode;
-  page += "</b>";
-  page += "<p>";
-
-  page += "<button type='button' title='slow' onclick='window.location = \"/slow\";'>slow</button>";
-  page += "<button type='button' title='normal' onclick='window.location = \"/normal\";'>normal</button>";
-  page += "<button type='button' title='fast' onclick='window.location = \"/fast\";'>fast</button>";
-
-  page += "</body>";
-  mServer.send(200, "text/html", page);
-}
-
 void WebServer::sendRedirect() {
   String page = "";
   page += "<head>";
@@ -59,46 +42,62 @@ void WebServer::sendRedirect() {
   mServer.send(200, "text/html", page);
 }
 
-void WebServer::handleRoot() {
-  sendResultPage();
+void WebServer::handleHome() {
+  String page = "";
+
+  page += "<head>";
+  page += "<link rel=stylesheet type=text/css href=\"/index.css\">";
+  page += "</head>";
+  page += "<body>";
+  page += "<h1>led-panel-controller</h1>";
+  page += "<h2>LED panel #" PANEL_ID "</h2>";
+  page += MDNS_NAME "." MDNS_NETWORK;
+  // page += MDNS_NAME "." MDNS_NETWORK " @ " + network.localIP().toString();
+  // page += "<p>";
+  // page += "Active LED mode: <b>";
+  // page += pwmMode;
+  // page += "</b>";
+  page += "<p>";
+
+  page += "<button type='button' title='ON' onclick='window.location = \"/on\";'>ON</button>";
+  page += "<button type='button' title='OFF' onclick='window.location = \"/off\";'>OFF</button>";
+  page += "<button type='button' title='lo' onclick='window.location = \"/lo\";'>lo</button>";
+  page += "<button type='button' title='med' onclick='window.location = \"/med\";'>med</button>";
+  page += "<button type='button' title='hi' onclick='window.location = \"/hi\";'>hi</button>";
+
+  page += "</body>";
+  mServer.send(200, "text/html", page);
 }
 
-void WebServer::handleFast() {
-  // setPWMMode_Fast();
+void WebServer::handlePresetLevel(unsigned short level) {
   if (onChangeLevel)
-    onChangeLevel(PWM_MAX_VALUE);
+    onChangeLevel(level);
   sendRedirect();
 }
 
-void WebServer::handleNormal() {
-  // setPWMMode_Normal();
-  if (onChangeLevel)
-    onChangeLevel(80);
+void WebServer::handleLevel() {
+  for (uint8_t i = 0; i < mServer.args(); i++) {
+    if (mServer.argName(i) == "level") {
+      if (onChangeLevel) {
+        unsigned int level = (unsigned int) mServer.arg(i).toInt();
+        onChangeLevel(level);
+      }
+      sendRedirect();
+      return;
+    }
+  }
+
+  mServer.send(400, "text/plain", "Bad request");
+}
+
+void WebServer::handleDefault() {
   sendRedirect();
 }
 
-void WebServer::handleSlow() {
-  // setPWMMode_Slow();
-  if (onChangeLevel)
-    onChangeLevel(PWM_MIN_VALUE);
-  sendRedirect();
+void WebServer::handleNotFound() {
+  mServer.send(404, "text/plain", "Not found");
 }
 
 void WebServer::handleIndexCSS() {
   mServer.send(200, "text/css", INDEX_CSS);
-}
-
-void WebServer::handleNotFound() {
-  String message = "File Not Found\n\n";
-  message += "URI: ";
-  message += mServer.uri();
-  message += "\nMethod: ";
-  message += (mServer.method() == HTTP_GET) ? "GET" : "POST";
-  message += "\nArguments: ";
-  message += mServer.args();
-  message += "\n";
-  for (uint8_t i = 0; i < mServer.args(); i++) {
-    message += " " + mServer.argName(i) + ": " + mServer.arg(i) + "\n";
-  }
-  mServer.send(404, "text/plain", message);
 }
