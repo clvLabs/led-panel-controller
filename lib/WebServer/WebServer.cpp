@@ -26,7 +26,7 @@ void WebServer::start() {
   mServer.on("/default", std::bind(&WebServer::handleDefault, this));
 
   mServer.begin(WEB_SERVER_PORT);
-  Serial.print("- Web server started on port ");
+  Serial.print("Web server started on port ");
   Serial.println(WEB_SERVER_PORT);
 }
 

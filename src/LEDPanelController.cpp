@@ -10,12 +10,12 @@ LEDPanelController::~LEDPanelController()
 {}
 
 void LEDPanelController::onNetworkConnect() {
-  Serial.println("- Listening");
+  Serial.println("Listening");
   statusLED.listening();
 }
 
 void LEDPanelController::onNetworkDisconnect() {
-  Serial.println("- NETWORK CONNECTION LOST !!! ");
+  Serial.println("NETWORK CONNECTION LOST !!! ");
   statusLED.connecting();
 }
 

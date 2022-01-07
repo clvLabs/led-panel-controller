@@ -14,7 +14,7 @@ Network::~Network()
 {}
 
 void Network::start() {
-  Serial.println(" Starting network");
+  Serial.println("Starting network");
   WiFi.mode(WIFI_STA);
   WiFi.setAutoConnect(true);
   WiFi.begin(WIFI_SSID, WIFI_PASSWORD);
@@ -26,15 +26,15 @@ void Network::waitForConnection() {
     mbConnecting = false;
     miLastConnectionCheck = millis();
 
-    Serial.print("- Connected to ");
+    Serial.print("Connected to ");
     Serial.print(WIFI_SSID);
     Serial.print(" - IP address: ");
     Serial.println(localIP());
 
     if (MDNS.begin(MDNS_NAME)) {
-      Serial.println("- MDNS responder started as " MDNS_NAME "." MDNS_NETWORK);
+      Serial.println("MDNS responder started as " MDNS_NAME "." MDNS_NETWORK);
     } else {
-      Serial.println("- COULDN'T start MDNS responder as " MDNS_NAME "." MDNS_NETWORK);
+      Serial.println("COULDN'T start MDNS responder as " MDNS_NAME "." MDNS_NETWORK);
     }
 
     if (onConnect)
