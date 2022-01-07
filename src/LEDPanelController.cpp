@@ -24,6 +24,7 @@ void LEDPanelController::onWebServerChangeLevel(uint8_t level) {
   panel.setLevel(miLevel);
   Serial.print("Level changed by web request: ");
   Serial.println(miLevel);
+  statusLED.commandReceived();
 }
 
 void LEDPanelController::onWebServerChangeDefault(uint8_t level) {
@@ -31,6 +32,7 @@ void LEDPanelController::onWebServerChangeDefault(uint8_t level) {
   eepromCfg.write();
   Serial.print("Default level changed by web request: ");
   Serial.println(miLevel);
+  statusLED.commandReceived();
 }
 
 void LEDPanelController::setup() {

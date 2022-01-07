@@ -15,6 +15,7 @@ public:
   void off();
   void connecting();
   void listening();
+  void commandReceived();
 
 private:
   uint8_t miPin;

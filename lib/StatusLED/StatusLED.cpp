@@ -34,3 +34,7 @@ void StatusLED::connecting() {
 void StatusLED::listening() {
   mLED.blink(10, 10000);
 }
+
+void StatusLED::commandReceived() {
+  mLED.flash(100);
+}

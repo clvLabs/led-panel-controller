@@ -8,9 +8,12 @@ LED::LED()
 , miHighValue(HIGH)
 , mbLEDIsOn(false)
 , mbBlinking(false)
+, mbFlashing(false)
 , miOnTime(0)
 , miOffTime(0)
 , miLastLEDStateChange(0)
+, miFlashTime(0)
+, miFlashStartTime(0)
 {}
 
 LED::~LED() {}
@@ -29,15 +32,24 @@ void LED::setup(uint8_t pin, bool inverseLogic) {
 }
 
 void LED::loop() {
-  if (mbBlinking) {
-      uint32_t elapsed = millis() - miLastLEDStateChange;
+  if (mbFlashing) {
+    uint32_t elapsed = millis() - miFlashStartTime;
+    if (elapsed < miFlashTime)
+      return;
 
-      if (mbLEDIsOn && elapsed > miOnTime) {
-        _off();
-      }
-      else if (!mbLEDIsOn && elapsed > miOffTime) {
-        _on();
-      }
+    _off();
+    mbFlashing = false;
+  }
+
+  if (mbBlinking) {
+    uint32_t elapsed = millis() - miLastLEDStateChange;
+
+    if (mbLEDIsOn && elapsed > miOnTime) {
+      _off();
+    }
+    else if (!mbLEDIsOn && elapsed > miOffTime) {
+      _on();
+    }
   }
 }
 
@@ -52,10 +64,17 @@ void LED::off() {
 }
 
 void LED::blink(uint32_t onTime, uint32_t offTime) {
+  _on();
   miOnTime = onTime;
   miOffTime = offTime;
   mbBlinking = true;
+}
+
+void LED::flash(uint32_t flashTime) {
   _on();
+  miFlashTime = flashTime;
+  miFlashStartTime = millis();
+  mbFlashing = true;
 }
 
 void LED::_on() {
