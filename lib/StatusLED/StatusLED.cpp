@@ -28,7 +28,7 @@ void StatusLED::off() {
 }
 
 void StatusLED::connecting() {
-  mLED.blink(100, 100);
+  mLED.blink(100, 10);
 }
 
 void StatusLED::listening() {
