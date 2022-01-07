@@ -17,3 +17,20 @@ void StatusLED::setup(int pin, bool inverseLogic) {
 void StatusLED::loop() {
   mLED.loop();
 }
+
+
+void StatusLED::on() {
+  mLED.on();
+}
+
+void StatusLED::off() {
+  mLED.off();
+}
+
+void StatusLED::connecting() {
+  mLED.blink(1000, 100);
+}
+
+void StatusLED::listening() {
+  mLED.blink(100, 1000);
+}
