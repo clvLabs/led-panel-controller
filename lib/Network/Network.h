@@ -5,6 +5,9 @@
 class Network
 {
 public:
+  std::function< void() > onConnect;
+  std::function< void() > onDisconnect;
+
   Network();
   ~Network();
 
@@ -17,4 +20,11 @@ public:
   IPAddress localIP();
   String macAddress();
   bool isConnected();
+
+private:
+  bool mbConnecting;
+  uint32_t miLastConnectionCheck;
+
+  void waitForConnection();
+  bool checkDisconnection();
 };

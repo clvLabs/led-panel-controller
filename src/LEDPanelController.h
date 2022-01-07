@@ -17,6 +17,9 @@ public:
   void loop();
 
 private:
+  void onNetworkConnect();
+  void onNetworkDisconnect();
+
   void onWebServerChangeLevel(uint8_t level);
   void onWebServerChangeDefault(uint8_t level);
 

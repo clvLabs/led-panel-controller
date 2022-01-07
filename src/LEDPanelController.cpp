@@ -9,6 +9,16 @@ LEDPanelController::LEDPanelController()
 LEDPanelController::~LEDPanelController()
 {}
 
+void LEDPanelController::onNetworkConnect() {
+  Serial.println("- Listening");
+  statusLED.listening();
+}
+
+void LEDPanelController::onNetworkDisconnect() {
+  Serial.println("- NETWORK CONNECTION LOST !!! ");
+  statusLED.connecting();
+}
+
 void LEDPanelController::onWebServerChangeLevel(uint8_t level) {
   miLevel = level;
   panel.setLevel(miLevel);
@@ -33,14 +43,13 @@ void LEDPanelController::setup() {
   Serial.println(" led-panel-controller - LED panel #" PANEL_ID);
   Serial.println("-------------------------------------");
 
+  network.onConnect = std::bind(&LEDPanelController::onNetworkConnect, this);
+  network.onDisconnect = std::bind(&LEDPanelController::onNetworkDisconnect, this);
   network.start();
 
   webServer.onChangeLevel = std::bind(&LEDPanelController::onWebServerChangeLevel, this, std::placeholders::_1);
   webServer.onChangeDefault = std::bind(&LEDPanelController::onWebServerChangeDefault, this, std::placeholders::_1);
   webServer.start();
-
-  Serial.println("- Listening");
-  statusLED.listening();
 }
 
 void LEDPanelController::loop() {

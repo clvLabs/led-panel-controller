@@ -6,6 +6,9 @@
 #define WIFI_SSID      "my-wifi-network"
 #define WIFI_PASSWORD  "my-password"
 
+// Delay(ms) between network connectivity checks (once connected)
+#define NETWORK_CONNECTION_CHECK_DELAY  (10000)
+
 // ID of the LED panel (for multiple panel setups)
 #define PANEL_ID  "1"
 

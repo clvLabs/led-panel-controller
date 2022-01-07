@@ -6,6 +6,8 @@
 
 
 Network::Network()
+: mbConnecting(false)
+, miLastConnectionCheck(0)
 {}
 
 Network::~Network()
@@ -13,45 +15,62 @@ Network::~Network()
 
 void Network::start() {
   Serial.println(" Starting network");
-  uint32_t startTime = millis();
   WiFi.mode(WIFI_STA);
   WiFi.setAutoConnect(true);
   WiFi.begin(WIFI_SSID, WIFI_PASSWORD);
+  mbConnecting = true;
+}
 
-  // Wait for connection
-  wl_status_t status = WiFi.status();
-  while (status != WL_CONNECTED) {
-    Serial.print("  - Network status: ");
-    Serial.println(getStatusStr(status));
+void Network::waitForConnection() {
+  if (isConnected()) {
+    mbConnecting = false;
+    miLastConnectionCheck = millis();
 
-    // Total waiting time: 500ms
-    for (int i=0; i<3; i++) {
-      // ledON();
-      delay(50);
-      // ledOFF();
-      delay(50);
+    Serial.print("- Connected to ");
+    Serial.print(WIFI_SSID);
+    Serial.print(" - IP address: ");
+    Serial.println(localIP());
+
+    if (MDNS.begin(MDNS_NAME)) {
+      Serial.println("- MDNS responder started as " MDNS_NAME "." MDNS_NETWORK);
+    } else {
+      Serial.println("- COULDN'T start MDNS responder as " MDNS_NAME "." MDNS_NETWORK);
     }
-    delay(200);
 
-    status = WiFi.status();
-  }
-  uint32_t endTime = millis();
-
-  Serial.print("- Connected to ");
-  Serial.print(WIFI_SSID);
-  Serial.print(" - IP address: ");
-  Serial.println(WiFi.localIP());
-
-  Serial.print("- Connection time (ms): ");
-  Serial.println(endTime-startTime);
-
-  if (MDNS.begin(MDNS_NAME)) {
-    Serial.println("- MDNS responder started as " MDNS_NAME "." MDNS_NETWORK);
+    if (onConnect)
+      onConnect();
   }
 }
 
+bool Network::checkDisconnection() {
+  // Periodically check for disconnection
+  uint32_t elapsed = millis() - miLastConnectionCheck;
+
+  if (elapsed >= NETWORK_CONNECTION_CHECK_DELAY) {
+    miLastConnectionCheck = millis();
+
+    if (!isConnected()) {
+      mbConnecting = true;
+
+      if (onDisconnect)
+        onDisconnect();
+
+      return true;
+    }
+  }
+
+  return false;
+}
+
 void Network::loop() {
-  MDNS.update();
+  if (mbConnecting) {
+    waitForConnection();
+    return;
+  }
+
+  if (!checkDisconnection()) {
+    MDNS.update();
+  }
 }
 
 
