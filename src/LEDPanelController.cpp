@@ -27,7 +27,7 @@ void LEDPanelController::setup() {
   statusLED.setup(STATUSLED_PIN, STATUSLED_INVERTED);
   statusLED.connecting();
 
-  Serial.begin(9600);
+  Serial.begin(115200);
   delay(100);
   Serial.println("\n\n\n");
   Serial.println(" led-panel-controller - LED panel #" PANEL_ID);
