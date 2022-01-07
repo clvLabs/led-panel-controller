@@ -6,6 +6,7 @@ class WebServer
 {
 public:
   std::function< void(uint8_t) > onChangeLevel;
+  std::function< void(uint8_t) > onChangeDefault;
 
   WebServer();
   ~WebServer();

@@ -14,8 +14,14 @@ void LEDPanelController::onWebServerChangeLevel(uint8_t level) {
   panel.setLevel(miLevel);
 }
 
+void LEDPanelController::onWebServerChangeDefault(uint8_t level) {
+  eepromCfg.data.level = level;
+  eepromCfg.write();
+}
+
 void LEDPanelController::setup() {
-  miLevel = PANEL_DEFAULT_LEVEL;
+  eepromCfg.read();
+  miLevel = eepromCfg.data.level;
   panel.setLevel(miLevel);
 
   statusLED.setup(STATUSLED_PIN, STATUSLED_INVERTED);
@@ -30,6 +36,7 @@ void LEDPanelController::setup() {
   network.start();
 
   webServer.onChangeLevel = std::bind(&LEDPanelController::onWebServerChangeLevel, this, std::placeholders::_1);
+  webServer.onChangeDefault = std::bind(&LEDPanelController::onWebServerChangeDefault, this, std::placeholders::_1);
   webServer.start();
 
   Serial.println("- Listening");

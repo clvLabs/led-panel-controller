@@ -1,6 +1,7 @@
 #pragma once
 
 #include <Arduino.h>
+#include "EEPROMConfig.h"
 #include "StatusLED.h"
 #include "Network.h"
 #include "WebServer.h"
@@ -17,7 +18,9 @@ public:
 
 private:
   void onWebServerChangeLevel(uint8_t level);
+  void onWebServerChangeDefault(uint8_t level);
 
+  EEPROMConfig eepromCfg;
   StatusLED statusLED;
   Network network;
   WebServer webServer;

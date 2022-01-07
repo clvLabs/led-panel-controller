@@ -91,7 +91,18 @@ void WebServer::handleLevel() {
 }
 
 void WebServer::handleDefault() {
-  sendRedirect();
+  for (uint8_t i = 0; i < mServer.args(); i++) {
+    if (mServer.argName(i) == "level") {
+      if (onChangeDefault) {
+        uint8_t level = (uint8_t) mServer.arg(i).toInt();
+        onChangeDefault(level);
+      }
+      sendRedirect();
+      return;
+    }
+  }
+
+  mServer.send(400, "text/plain", "Bad request");
 }
 
 void WebServer::handleNotFound() {
