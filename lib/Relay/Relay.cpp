@@ -17,7 +17,14 @@ void Relay::loop() {}
 
 void Relay::setState(bool on) {
   if (on != mbOn) {
-    // Manage change
+
+    if (on) {
+      digitalWrite(miSetPin, HIGH);
+      digitalWrite(miRstPin, LOW);
+    } else {
+      digitalWrite(miSetPin, LOW);
+      digitalWrite(miRstPin, HIGH);
+    }
   }
   mbOn = on;
 }
