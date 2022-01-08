@@ -15,7 +15,7 @@ void LEDPanelController::start() {
   panel.start();
   panel.setLevel(miLevel);
 
-  statusLED.start(STATUSLED_PIN, STATUSLED_INVERTED);
+  statusLED.start();
   statusLED.connecting();
 
   Serial.begin(115200);

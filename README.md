@@ -53,10 +53,6 @@ Once the project is cloned, copy `lib/Config/Config.sample.h` as `lib/Config/Con
 // Web server settings
 #define WEB_SERVER_PORT (80)
 
-// Status LED pin
-#define STATUSLED_PIN (12)
-#define STATUSLED_INVERTED (false)
-
 // Relay coil pins
 #define RELAY_SET_PIN (4)
 #define RELAY_RST_PIN (5)
@@ -84,8 +80,6 @@ Once the project is cloned, copy `lib/Config/Config.sample.h` as `lib/Config/Con
 * `MDNS_NAME`: Name for this device in the network.
 * `MDNS_NETWORK`: Local network name.
 * `WEB_SERVER_PORT`: TCP port for the web server.
-* `STATUSLED_PIN`: `ESP8266 GPIO` pin to use for the status LED.
-* `STATUSLED_INVERTED`: Does the status LED use inverted logic?
 * `RELAY_SET_PIN`: `ESP8266 GPIO` pin to use for the relay's `SET` coil.
 * `RELAY_RST_PIN`: `ESP8266 GPIO` pin to use for the relay's `RESET` coil.
 * `RELAY_COIL_ACTIVATION_TIME`: time (ms) to keep the relay's coil activated (see relay's datasheet).

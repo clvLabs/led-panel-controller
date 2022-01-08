@@ -22,10 +22,6 @@
 // Web server settings
 #define WEB_SERVER_PORT (80)
 
-// Status LED pin
-#define STATUSLED_PIN (12)
-#define STATUSLED_INVERTED (false)
-
 // Relay coil pins
 #define RELAY_SET_PIN (4)
 #define RELAY_RST_PIN (5)

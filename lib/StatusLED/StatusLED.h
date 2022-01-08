@@ -8,7 +8,7 @@ public:
   StatusLED();
   ~StatusLED();
 
-  void start(uint8_t pin, bool inverse=false);
+  void start();
   void loop();
 
   void on();
@@ -18,7 +18,5 @@ public:
   void commandReceived();
 
 private:
-  uint8_t miPin;
-  bool mbInverseLogic;
   LED mLED;
 };

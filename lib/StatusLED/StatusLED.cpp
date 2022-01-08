@@ -1,17 +1,12 @@
 #include <Arduino.h>
 #include "StatusLED.h"
 
-StatusLED::StatusLED()
-: miPin(0)
-, mbInverseLogic(false)
-{}
+StatusLED::StatusLED() {}
 
 StatusLED::~StatusLED() {}
 
-void StatusLED::start(uint8_t pin, bool inverseLogic) {
-  miPin = pin;
-  mbInverseLogic = inverseLogic;
-  mLED.start(pin, inverseLogic);
+void StatusLED::start() {
+  mLED.start(LED_BUILTIN, false);
 }
 
 void StatusLED::loop() {
