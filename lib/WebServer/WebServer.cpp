@@ -77,7 +77,7 @@ void WebServer::handlePresetLevel(uint8_t level) {
 
 void WebServer::handleLevel() {
   for (uint8_t i = 0; i < mServer.args(); i++) {
-    if (mServer.argName(i) == "level") {
+    if (mServer.argName(i) == "value") {
       if (onChangeLevel) {
         uint8_t level = (uint8_t) mServer.arg(i).toInt();
         onChangeLevel(level);
@@ -92,7 +92,7 @@ void WebServer::handleLevel() {
 
 void WebServer::handleDefault() {
   for (uint8_t i = 0; i < mServer.args(); i++) {
-    if (mServer.argName(i) == "level") {
+    if (mServer.argName(i) == "value") {
       if (onChangeDefault) {
         uint8_t level = (uint8_t) mServer.arg(i).toInt();
         onChangeDefault(level);
