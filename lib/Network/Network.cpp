@@ -38,14 +38,16 @@ void Network::waitForConnection() {
     miLastConnectionCheck = millis();
 
     Serial.print("Connected to ");
-    Serial.print(WIFI_SSID);
-    Serial.print(" - IP address: ");
+    Serial.println(WIFI_SSID);
+    Serial.print("IP address: ");
     Serial.println(localIP());
+    Serial.print("RSSI: ");
+    Serial.println(WiFi.RSSI());
 
     if (MDNS.begin(MDNS_NAME)) {
-      Serial.println("MDNS responder started as " MDNS_NAME "." MDNS_NETWORK);
+      Serial.println("MDNS responder started as: " MDNS_NAME "." MDNS_NETWORK);
     } else {
-      Serial.println("COULDN'T start MDNS responder as " MDNS_NAME "." MDNS_NETWORK);
+      Serial.println("COULDN'T start MDNS responder as: " MDNS_NAME "." MDNS_NETWORK);
     }
 
     if (onConnect)
