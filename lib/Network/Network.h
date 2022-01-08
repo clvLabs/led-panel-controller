@@ -14,6 +14,7 @@ public:
   void start();
   void loop();
 
+  void printConnectionInfo();
   const char* getStatusStr();
   const char* getStatusStr(wl_status_t status);
 
@@ -27,4 +28,6 @@ private:
 
   void waitForConnection();
   bool checkDisconnection();
+  void startMDNS();
+  void startOTA();
 };

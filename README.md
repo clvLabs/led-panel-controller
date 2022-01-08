@@ -26,7 +26,12 @@ Besides that, the controller accepts a few `GET` routes:
 
 ## setup
 
-Once the project is cloned, copy `lib/Config/Config.sample.h` as `lib/Config/Config.h` and edit it to set your configuration.
+Once the project is cloned, copy the template files and edit them to set your configuration.
+
+```
+$ cp lib/Config/Config.sample.h lib/Config/Config.h
+$ cp platformio.sample.ini platformio.ini
+```
 
 ### config.h
 ```c
@@ -54,6 +59,10 @@ Once the project is cloned, copy `lib/Config/Config.sample.h` as `lib/Config/Con
 // Web server settings
 #define WEB_SERVER_PORT (80)
 
+// OTA settings
+#define OTA_PORT (8266)
+#define OTA_PASSWORD "my-ota-password"
+
 // Relay coil pins
 #define RELAY_SET_PIN (4)
 #define RELAY_RST_PIN (5)
@@ -72,7 +81,6 @@ Once the project is cloned, copy `lib/Config/Config.sample.h` as `lib/Config/Con
 #define DEMO_JUMPER_PIN (13)
 ```
 
-
 * `WIFI_SSID`: The name of your WiFi network.
 * `WIFI_PASSWORD`: Password to connect to the network.
 * `NETWORK_CONNECTION_CHECK_DELAY`: While connected, the program will make sure connection is up. This is the delay in milliseconds.
@@ -81,6 +89,8 @@ Once the project is cloned, copy `lib/Config/Config.sample.h` as `lib/Config/Con
 * `MDNS_NAME`: Name for this device in the network.
 * `MDNS_NETWORK`: Local network name.
 * `WEB_SERVER_PORT`: TCP port for the web server.
+* `OTA_PORT`: UDP port for [ArduinoOTA](https://www.arduino.cc/reference/en/libraries/arduinoota/).
+* `OTA_PASSWORD`: Password for OTA updates.
 * `RELAY_SET_PIN`: `ESP8266 GPIO` pin to use for the relay's `SET` coil.
 * `RELAY_RST_PIN`: `ESP8266 GPIO` pin to use for the relay's `RESET` coil.
 * `RELAY_COIL_ACTIVATION_TIME`: time (ms) to keep the relay's coil activated (see relay's datasheet).
@@ -88,3 +98,23 @@ Once the project is cloned, copy `lib/Config/Config.sample.h` as `lib/Config/Con
 * `PWM_MIN_VALUE`: Minimum `PWM` value accepted by the LED Panel driver.
 * `PWM_MAX_VALUE`: Maximum `PWM` value accepted by the LED Panel driver.
 * `DEMO_JUMPER_PIN`: `ESP8266 GPIO` pin to use for the `demo mode`.
+
+
+### platformio.ini
+```ini
+[env:esp12e]
+platform = espressif8266
+board = esp12e
+framework = arduino
+monitor_speed = 115200
+upload_protocol = espota
+upload_port = led-panel-1.local
+upload_flags =
+    --port=8266
+    --auth=my-ota-password
+```
+
+* `upload_port`: your device's `MDNS` full name (based on `MDNS_NAME` / `PANEL_ID` / `MDNS_NETWORK`).
+* `upload_flags:`:
+  * `--port`: set to the same value as `OTA_PORT`.
+  * `--auth`: set to the same value as `OTA_PASSWORD`.

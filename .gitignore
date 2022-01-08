@@ -1,5 +1,6 @@
 # User configuration
 lib/Config/Config.h
+platformio.ini
 
 # Local dev stuff
 /local
