@@ -6,6 +6,7 @@ public:
   Relay();
   ~Relay();
 
+  void start();
   void loop();
 
   void on();

@@ -6,6 +6,7 @@ public:
   Dimmer();
   ~Dimmer();
 
+  void start();
   void loop();
 
   void setLevel(uint8_t level);

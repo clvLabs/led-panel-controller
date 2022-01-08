@@ -8,14 +8,16 @@ Relay::Relay()
 , mbOn(false)
 , mbCoilActive(false)
 , miCoilActivationTime(0)
-{
+{}
+
+Relay::~Relay() {}
+
+void Relay::start() {
   pinMode(miSetPin, OUTPUT);
   pinMode(miRstPin, OUTPUT);
 
   _off();
 }
-
-Relay::~Relay() {}
 
 void Relay::loop() {
   _checkCoil();

@@ -4,7 +4,7 @@
 LEDPanelController controller;
 
 void setup() {
-  controller.setup();
+  controller.start();
 }
 
 void loop() {

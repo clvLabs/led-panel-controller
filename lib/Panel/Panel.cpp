@@ -10,6 +10,11 @@ Panel::Panel()
 
 Panel::~Panel() {}
 
+void Panel::start() {
+  mRelay.start();
+  mDimmer.start();
+}
+
 void Panel::loop() {
   mRelay.loop();
   mDimmer.loop();

@@ -6,7 +6,7 @@ public:
   LED();
   ~LED();
 
-  void setup(uint8_t pin, bool inverse=false);
+  void start(uint8_t pin, bool inverse=false);
   void loop();
 
   void on();

@@ -18,7 +18,7 @@ LED::LED()
 
 LED::~LED() {}
 
-void LED::setup(uint8_t pin, bool inverseLogic) {
+void LED::start(uint8_t pin, bool inverseLogic) {
   miPin = pin;
   mbInverseLogic = inverseLogic;
   pinMode(miPin, OUTPUT);

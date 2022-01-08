@@ -4,7 +4,6 @@
 #include "Config.h"
 #include "Network.h"
 
-
 Network::Network()
 : mbConnecting(false)
 , miLastConnectionCheck(0)
@@ -19,6 +18,17 @@ void Network::start() {
   WiFi.setAutoConnect(true);
   WiFi.begin(WIFI_SSID, WIFI_PASSWORD);
   mbConnecting = true;
+}
+
+void Network::loop() {
+  if (mbConnecting) {
+    waitForConnection();
+    return;
+  }
+
+  if (!checkDisconnection()) {
+    MDNS.update();
+  }
 }
 
 void Network::waitForConnection() {
@@ -61,18 +71,6 @@ bool Network::checkDisconnection() {
 
   return false;
 }
-
-void Network::loop() {
-  if (mbConnecting) {
-    waitForConnection();
-    return;
-  }
-
-  if (!checkDisconnection()) {
-    MDNS.update();
-  }
-}
-
 
 const char* Network::getStatusStr() {
   return getStatusStr(WiFi.status());

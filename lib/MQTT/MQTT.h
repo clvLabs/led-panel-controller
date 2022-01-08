@@ -6,7 +6,7 @@ public:
   MQTT();
   ~MQTT();
 
-  void setup();
+  void start();
   void loop();
 
 private:

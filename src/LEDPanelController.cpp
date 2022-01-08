@@ -9,6 +9,37 @@ LEDPanelController::LEDPanelController()
 LEDPanelController::~LEDPanelController()
 {}
 
+void LEDPanelController::start() {
+  eepromCfg.read();
+  miLevel = eepromCfg.data.level;
+  panel.start();
+  panel.setLevel(miLevel);
+
+  statusLED.start(STATUSLED_PIN, STATUSLED_INVERTED);
+  statusLED.connecting();
+
+  Serial.begin(115200);
+  delay(100);
+  Serial.println("\n\n\n");
+  Serial.println(" led-panel-controller - LED panel #" PANEL_ID);
+  Serial.println("-------------------------------------");
+
+  network.onConnect = std::bind(&LEDPanelController::onNetworkConnect, this);
+  network.onDisconnect = std::bind(&LEDPanelController::onNetworkDisconnect, this);
+  network.start();
+
+  webServer.onChangeLevel = std::bind(&LEDPanelController::onWebServerChangeLevel, this, std::placeholders::_1);
+  webServer.onChangeDefault = std::bind(&LEDPanelController::onWebServerChangeDefault, this, std::placeholders::_1);
+  webServer.start();
+}
+
+void LEDPanelController::loop() {
+  network.loop();
+  webServer.loop();
+  statusLED.loop();
+  panel.loop();
+}
+
 void LEDPanelController::onNetworkConnect() {
   Serial.println("Listening");
   statusLED.listening();
@@ -39,34 +70,4 @@ void LEDPanelController::onWebServerChangeDefault(uint8_t level) {
   Serial.print("Default level changed by web request: ");
   Serial.println(miLevel);
   statusLED.commandReceived();
-}
-
-void LEDPanelController::setup() {
-  eepromCfg.read();
-  miLevel = eepromCfg.data.level;
-  panel.setLevel(miLevel);
-
-  statusLED.setup(STATUSLED_PIN, STATUSLED_INVERTED);
-  statusLED.connecting();
-
-  Serial.begin(115200);
-  delay(100);
-  Serial.println("\n\n\n");
-  Serial.println(" led-panel-controller - LED panel #" PANEL_ID);
-  Serial.println("-------------------------------------");
-
-  network.onConnect = std::bind(&LEDPanelController::onNetworkConnect, this);
-  network.onDisconnect = std::bind(&LEDPanelController::onNetworkDisconnect, this);
-  network.start();
-
-  webServer.onChangeLevel = std::bind(&LEDPanelController::onWebServerChangeLevel, this, std::placeholders::_1);
-  webServer.onChangeDefault = std::bind(&LEDPanelController::onWebServerChangeDefault, this, std::placeholders::_1);
-  webServer.start();
-}
-
-void LEDPanelController::loop() {
-  network.loop();
-  webServer.loop();
-  statusLED.loop();
-  panel.loop();
 }

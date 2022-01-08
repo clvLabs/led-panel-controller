@@ -5,11 +5,13 @@
 Dimmer::Dimmer()
 : miPin(PWM_DIM_PIN)
 , miLevel(0)
-{
-  pinMode(miPin, OUTPUT);
-}
+{}
 
 Dimmer::~Dimmer() {}
+
+void Dimmer::start() {
+  pinMode(miPin, OUTPUT);
+}
 
 void Dimmer::loop() {}
 

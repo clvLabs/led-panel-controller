@@ -13,7 +13,7 @@ public:
   LEDPanelController();
   ~LEDPanelController();
 
-  void setup();
+  void start();
   void loop();
 
 private:

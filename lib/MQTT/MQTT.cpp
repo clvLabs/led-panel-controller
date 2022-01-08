@@ -5,5 +5,5 @@
 MQTT::MQTT() {}
 MQTT::~MQTT() {}
 
-void MQTT::setup() {}
+void MQTT::start() {}
 void MQTT::loop() {}

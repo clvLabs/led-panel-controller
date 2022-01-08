@@ -8,16 +8,15 @@ StatusLED::StatusLED()
 
 StatusLED::~StatusLED() {}
 
-void StatusLED::setup(uint8_t pin, bool inverseLogic) {
+void StatusLED::start(uint8_t pin, bool inverseLogic) {
   miPin = pin;
   mbInverseLogic = inverseLogic;
-  mLED.setup(pin, inverseLogic);
+  mLED.start(pin, inverseLogic);
 }
 
 void StatusLED::loop() {
   mLED.loop();
 }
-
 
 void StatusLED::on() {
   mLED.on();
