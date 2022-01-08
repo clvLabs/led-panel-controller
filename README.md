@@ -22,6 +22,7 @@ Besides that, the controller accepts a few `GET` routes:
 * `http://led-panel-1.local/hi`: Turn the light on at maximum value (same as `on`).
 * `http://led-panel-1.local/level?value=75`: Turn the light on at 75%.
 * `http://led-panel-1.local/default?value=50`: Set the default level (for startup) at 50%.
+* `http://led-panel-1.local/reboot`: Reboot the module.
 
 ## setup
 

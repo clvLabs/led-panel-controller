@@ -15,6 +15,7 @@ void WebServer::start() {
   mServer.on("/index.css", std::bind(&WebServer::handleIndexCSS, this));
 
   mServer.on("/", std::bind(&WebServer::handleHome, this));
+  mServer.on("/reboot", std::bind(&WebServer::handleReboot, this));
 
   mServer.on("/on", std::bind(&WebServer::handlePresetLevel,  this, 100));
   mServer.on("/off", std::bind(&WebServer::handlePresetLevel, this, 0));
@@ -67,6 +68,11 @@ void WebServer::handleHome() {
 
   page += "</body>";
   mServer.send(200, "text/html", page);
+}
+
+void WebServer::handleReboot() {
+  Serial.println("WARNING: Rebooting as requested via web.");
+  ESP.reset();
 }
 
 void WebServer::handlePresetLevel(uint8_t level) {
