@@ -50,15 +50,14 @@ void WebServer::handleHome() {
   page += "<link rel=stylesheet type=text/css href=\"/index.css\">";
   page += "</head>";
   page += "<body>";
-  page += "<h1>led-panel-controller</h1>";
-  page += "<h2>LED panel #" PANEL_ID "</h2>";
+  page += "<h1>";
   page += MDNS_NAME "." MDNS_NETWORK;
-  // page += MDNS_NAME "." MDNS_NETWORK " @ " + network.localIP().toString();
-  // page += "<p>";
+  page += "</h1>";
+
   // page += "Active LED mode: <b>";
   // page += pwmMode;
   // page += "</b>";
-  page += "<p>";
+  // page += "<p>";
 
   page += "<button type='button' title='ON' onclick='window.location = \"/on\";'>ON</button>";
   page += "<button type='button' title='OFF' onclick='window.location = \"/off\";'>OFF</button>";
