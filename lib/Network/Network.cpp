@@ -16,6 +16,7 @@ void Network::start() {
   Serial.println("Starting network");
   WiFi.mode(WIFI_STA);
   WiFi.setAutoConnect(true);
+  WiFi.persistent(true);
   WiFi.begin(WIFI_SSID, WIFI_PASSWORD);
   mbConnecting = true;
 }
