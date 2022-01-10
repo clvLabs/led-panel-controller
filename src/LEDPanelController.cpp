@@ -38,6 +38,7 @@ void LEDPanelController::loop() {
   webServer.loop();
   statusLED.loop();
   panel.loop();
+  delay(10);
 }
 
 void LEDPanelController::onNetworkConnect() {
