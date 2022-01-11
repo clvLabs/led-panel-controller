@@ -7,7 +7,7 @@ struct _EEPROMConfigData
 	uint16_t _programSignature;
 
 	// Default dim level
-	uint8_t level;
+	uint8_t defaultDimLevel;
 };
 
 

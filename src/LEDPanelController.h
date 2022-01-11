@@ -24,10 +24,10 @@ private:
   void onWebServerChangeLevel(uint8_t level);
   void onWebServerChangeDefault(uint8_t level);
 
-  EEPROMConfig eepromCfg;
-  StatusLED statusLED;
-  Network network;
-  WebServer webServer;
-  Panel panel;
+  EEPROMConfig mEEPROMCfg;
+  StatusLED mStatusLED;
+  Network mNetwork;
+  WebServer mWebServer;
+  Panel mPanel;
   State mState;
 };

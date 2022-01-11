@@ -44,7 +44,7 @@ void EEPROMConfig::init()
 {
 	// Set initial configuration values
 	data._programSignature = PROGRAM_EEPROM_SIGNATURE;
-	data.level = PANEL_DEFAULT_LEVEL;
+	data.defaultDimLevel = PANEL_DEFAULT_LEVEL;
 
 	// Write new values to EEPROM
 	write();

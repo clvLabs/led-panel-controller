@@ -7,13 +7,13 @@ LEDPanelController::LEDPanelController() {}
 LEDPanelController::~LEDPanelController() {}
 
 void LEDPanelController::start() {
-  eepromCfg.read();
-  mState.mLightLevel.miDefault = eepromCfg.data.level;
-  mState.mLightLevel.miCurrent = eepromCfg.data.level;
-  panel.start(&mState);
+  mEEPROMCfg.read();
+  mState.mLightLevel.miDefault = mEEPROMCfg.data.defaultDimLevel;
+  mState.mLightLevel.miCurrent = mEEPROMCfg.data.defaultDimLevel;
+  mPanel.start(&mState);
 
-  statusLED.start();
-  statusLED.connecting();
+  mStatusLED.start();
+  mStatusLED.connecting();
 
   Serial.begin(115200);
   delay(100);
@@ -21,31 +21,31 @@ void LEDPanelController::start() {
   Serial.println(" led-panel-controller - LED panel #" PANEL_ID);
   Serial.println("-------------------------------------");
 
-  network.onConnect = std::bind(&LEDPanelController::onNetworkConnect, this);
-  network.onDisconnect = std::bind(&LEDPanelController::onNetworkDisconnect, this);
-  network.start(&mState);
+  mNetwork.onConnect = std::bind(&LEDPanelController::onNetworkConnect, this);
+  mNetwork.onDisconnect = std::bind(&LEDPanelController::onNetworkDisconnect, this);
+  mNetwork.start(&mState);
 
-  webServer.onChangeLevel = std::bind(&LEDPanelController::onWebServerChangeLevel, this, std::placeholders::_1);
-  webServer.onChangeDefault = std::bind(&LEDPanelController::onWebServerChangeDefault, this, std::placeholders::_1);
-  webServer.start(&mState);
+  mWebServer.onChangeLevel = std::bind(&LEDPanelController::onWebServerChangeLevel, this, std::placeholders::_1);
+  mWebServer.onChangeDefault = std::bind(&LEDPanelController::onWebServerChangeDefault, this, std::placeholders::_1);
+  mWebServer.start(&mState);
 }
 
 void LEDPanelController::loop() {
-  network.loop();
-  webServer.loop();
-  statusLED.loop();
-  panel.loop();
+  mNetwork.loop();
+  mWebServer.loop();
+  mStatusLED.loop();
+  mPanel.loop();
   delay(10);
 }
 
 void LEDPanelController::onNetworkConnect() {
   Serial.println("Listening");
-  statusLED.listening();
+  mStatusLED.listening();
 }
 
 void LEDPanelController::onNetworkDisconnect() {
   Serial.println("NETWORK CONNECTION LOST !!! ");
-  statusLED.connecting();
+  mStatusLED.connecting();
 }
 
 void LEDPanelController::onWebServerChangeLevel(uint8_t level) {
@@ -53,10 +53,10 @@ void LEDPanelController::onWebServerChangeLevel(uint8_t level) {
     return;
 
   mState.mLightLevel.miCurrent = level;
-  panel.setLevel(mState.mLightLevel.miCurrent);
+  mPanel.setLevel(mState.mLightLevel.miCurrent);
   Serial.print("Level changed by web request: ");
   Serial.println(mState.mLightLevel.miCurrent);
-  statusLED.commandReceived();
+  mStatusLED.commandReceived();
 }
 
 void LEDPanelController::onWebServerChangeDefault(uint8_t level) {
@@ -64,9 +64,9 @@ void LEDPanelController::onWebServerChangeDefault(uint8_t level) {
     return;
 
   mState.mLightLevel.miDefault = level;
-  eepromCfg.data.level = level;
-  eepromCfg.write();
+  mEEPROMCfg.data.defaultDimLevel = level;
+  mEEPROMCfg.write();
   Serial.print("Default level changed by web request: ");
   Serial.println(mState.mLightLevel.miDefault);
-  statusLED.commandReceived();
+  mStatusLED.commandReceived();
 }
