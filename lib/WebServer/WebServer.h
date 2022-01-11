@@ -25,6 +25,7 @@ private:
   void handleIndexCSS();
 
   void handleHome();
+  void handleInfo();
   void handleReboot();
   void handlePresetLevel(uint8_t level);
   void handleLevel();

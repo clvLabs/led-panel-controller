@@ -17,6 +17,7 @@ void WebServer::start(State* state) {
   mServer.on("/index.css", std::bind(&WebServer::handleIndexCSS, this));
 
   mServer.on("/", std::bind(&WebServer::handleHome, this));
+  mServer.on("/info", std::bind(&WebServer::handleInfo, this));
   mServer.on("/reboot", std::bind(&WebServer::handleReboot, this));
 
   mServer.on("/on", std::bind(&WebServer::handlePresetLevel,  this, 100));
@@ -28,9 +29,9 @@ void WebServer::start(State* state) {
   mServer.on("/level", std::bind(&WebServer::handleLevel, this));
   mServer.on("/default", std::bind(&WebServer::handleDefault, this));
 
-  mServer.begin(WEB_SERVER_PORT);
+  mServer.begin(mState->mWeb.miPort);
   Serial.print("Web server started on port ");
-  Serial.println(WEB_SERVER_PORT);
+  Serial.println(mState->mWeb.miPort);
 }
 
 void WebServer::loop() {
@@ -52,20 +53,70 @@ void WebServer::handleHome() {
   page += "<link rel=stylesheet type=text/css href=\"/index.css\">";
   page += "</head>";
   page += "<body>";
-  page += "<h1>";
-  page += MDNS_NAME "." MDNS_NETWORK;
-  page += "</h1>";
 
-  // page += "Active LED mode: <b>";
-  // page += pwmMode;
-  // page += "</b>";
-  // page += "<p>";
+  page += "<h1>";
+  page += mState->mNetwork.msMDNSName;
+  page += ".";
+  page += mState->mNetwork.msMDNSNetwork;
+  page += "</h1>";
 
   page += "<button type='button' title='ON' onclick='window.location = \"/on\";'>ON</button>";
   page += "<button type='button' title='OFF' onclick='window.location = \"/off\";'>OFF</button>";
   page += "<button type='button' title='lo' onclick='window.location = \"/lo\";'>lo</button>";
   page += "<button type='button' title='med' onclick='window.location = \"/med\";'>med</button>";
   page += "<button type='button' title='hi' onclick='window.location = \"/hi\";'>hi</button>";
+
+  page += "</body>";
+  mServer.send(200, "text/html", page);
+}
+
+void WebServer::handleInfo() {
+  String page = "";
+
+  page += "<head>";
+  page += "<link rel=stylesheet type=text/css href=\"/index.css\">";
+  page += "</head>";
+  page += "<body>";
+
+  page += "<h1>";
+  page += mState->mNetwork.msMDNSName;
+  page += ".";
+  page += mState->mNetwork.msMDNSNetwork;
+  page += "</h1>";
+
+  page += "<h2>LED Panel light level</h2><ul>";
+  page += "<li>Current: <b>";
+  page += mState->mLightLevel.miCurrent;
+  page += "</b></li>";
+  page += "<li>Default: <b>";
+  page += mState->mLightLevel.miDefault;
+  page += "</b></li>";
+  page += "</ul>";
+
+  page += "<h2>Network</h2><ul>";
+  page += "<li>SSID: <b>";
+  page += mState->mNetwork.msSSID;
+  page += "</b></li>";
+
+  page += "<li>RSSI: <b>";
+  page += mState->mNetwork.miRSSI;
+  page += "</b></li>";
+
+  page += "<li>IP: <b>";
+  page += mState->mNetwork.mIP.toString();
+  page += "</b></li>";
+
+  page += "<li>MAC: <b>";
+  page += mState->mNetwork.msMAC;
+  page += "</b></li>";
+
+  page += "<li>MDNS: <b>";
+  if (mState->mNetwork.mbMDNSStarted)
+    page += "STARTED";
+  else
+    page += "NOT STARTED";
+  page += "</b></li>";
+  page += "</ul>";
 
   page += "</body>";
   mServer.send(200, "text/html", page);
