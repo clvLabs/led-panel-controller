@@ -1,6 +1,7 @@
 #pragma once
 
 #include <ESP8266WiFi.h>
+#include "State.h"
 
 class Network
 {
@@ -11,7 +12,7 @@ public:
   Network();
   ~Network();
 
-  void start();
+  void start(State* state);
   void loop();
 
   void printConnectionInfo();
@@ -23,6 +24,7 @@ public:
   bool isConnected();
 
 private:
+  State* mState;
   bool mbConnecting;
   uint32_t miLastConnectionCheck;
 

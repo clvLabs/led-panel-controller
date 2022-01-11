@@ -1,6 +1,7 @@
 #pragma once
 
 #include <ESP8266WebServer.h>
+#include "State.h"
 
 class WebServer
 {
@@ -11,12 +12,15 @@ public:
   WebServer();
   ~WebServer();
 
-  void start();
+  void start(State* state);
   void loop();
 
   void sendRedirect();
 
 private:
+  State* mState;
+  ESP8266WebServer mServer;
+
   void handleNotFound();
   void handleIndexCSS();
 
@@ -25,6 +29,4 @@ private:
   void handlePresetLevel(uint8_t level);
   void handleLevel();
   void handleDefault();
-
-  ESP8266WebServer mServer;
 };

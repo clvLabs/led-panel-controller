@@ -10,9 +10,13 @@ Panel::Panel()
 
 Panel::~Panel() {}
 
-void Panel::start() {
+void Panel::start(State* state) {
+  mState = state;
+
   mRelay.start();
   mDimmer.start();
+
+  setLevel(mState->mLightLevel.miCurrent);
 }
 
 void Panel::loop() {

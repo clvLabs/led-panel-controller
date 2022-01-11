@@ -2,18 +2,15 @@
 #include "LEDPanelController.h"
 
 
-LEDPanelController::LEDPanelController()
-: miLevel(0)
-{}
+LEDPanelController::LEDPanelController() {}
 
-LEDPanelController::~LEDPanelController()
-{}
+LEDPanelController::~LEDPanelController() {}
 
 void LEDPanelController::start() {
   eepromCfg.read();
-  miLevel = eepromCfg.data.level;
-  panel.start();
-  panel.setLevel(miLevel);
+  mState.mLightLevel.miDefault = eepromCfg.data.level;
+  mState.mLightLevel.miCurrent = eepromCfg.data.level;
+  panel.start(&mState);
 
   statusLED.start();
   statusLED.connecting();
@@ -26,11 +23,11 @@ void LEDPanelController::start() {
 
   network.onConnect = std::bind(&LEDPanelController::onNetworkConnect, this);
   network.onDisconnect = std::bind(&LEDPanelController::onNetworkDisconnect, this);
-  network.start();
+  network.start(&mState);
 
   webServer.onChangeLevel = std::bind(&LEDPanelController::onWebServerChangeLevel, this, std::placeholders::_1);
   webServer.onChangeDefault = std::bind(&LEDPanelController::onWebServerChangeDefault, this, std::placeholders::_1);
-  webServer.start();
+  webServer.start(&mState);
 }
 
 void LEDPanelController::loop() {
@@ -52,23 +49,24 @@ void LEDPanelController::onNetworkDisconnect() {
 }
 
 void LEDPanelController::onWebServerChangeLevel(uint8_t level) {
-  if (level == miLevel)
+  if (level == mState.mLightLevel.miCurrent)
     return;
 
-  miLevel = level;
-  panel.setLevel(miLevel);
+  mState.mLightLevel.miCurrent = level;
+  panel.setLevel(mState.mLightLevel.miCurrent);
   Serial.print("Level changed by web request: ");
-  Serial.println(miLevel);
+  Serial.println(mState.mLightLevel.miCurrent);
   statusLED.commandReceived();
 }
 
 void LEDPanelController::onWebServerChangeDefault(uint8_t level) {
-  if (level == eepromCfg.data.level)
+  if (level == mState.mLightLevel.miDefault)
     return;
 
+  mState.mLightLevel.miDefault = level;
   eepromCfg.data.level = level;
   eepromCfg.write();
   Serial.print("Default level changed by web request: ");
-  Serial.println(miLevel);
+  Serial.println(mState.mLightLevel.miDefault);
   statusLED.commandReceived();
 }

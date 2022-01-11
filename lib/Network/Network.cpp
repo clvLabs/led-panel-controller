@@ -14,7 +14,9 @@ Network::Network()
 Network::~Network()
 {}
 
-void Network::start() {
+void Network::start(State* state) {
+  mState = state;
+
   Serial.println("Starting network");
   WiFi.mode(WIFI_STA);
   WiFi.setAutoConnect(true);
@@ -30,6 +32,7 @@ void Network::loop() {
   }
 
   if (!checkDisconnection()) {
+    mState->mNetwork.miRSSI = WiFi.RSSI();
     MDNS.update();
     ArduinoOTA.handle();
   }
@@ -80,6 +83,11 @@ void Network::waitForConnection() {
     mbConnecting = false;
     miLastConnectionCheck = millis();
 
+    mState->mNetwork.mbConnected = true;
+    mState->mNetwork.miRSSI = WiFi.RSSI();
+    mState->mNetwork.mIP = WiFi.localIP();
+    mState->mNetwork.msMAC = WiFi.macAddress();
+
     printConnectionInfo();
     startMDNS();
     startOTA();
@@ -99,6 +107,9 @@ bool Network::checkDisconnection() {
     if (!isConnected()) {
       mbConnecting = true;
 
+      mState->mNetwork.mbConnected = false;
+      mState->mNetwork.miRSSI = 255;
+
       if (onDisconnect)
         onDisconnect();
 
@@ -111,7 +122,10 @@ bool Network::checkDisconnection() {
 
 void Network::startMDNS() {
   Serial.println("Starting MDNS responder as: " MDNS_NAME "." MDNS_NETWORK);
-  if (MDNS.begin(MDNS_NAME)) {
+
+  mState->mNetwork.mbMDNSStarted = MDNS.begin(MDNS_NAME);
+
+  if (mState->mNetwork.mbMDNSStarted) {
     Serial.println("MDNS responder started successfully");
   } else {
     Serial.println("COULDN'T start MDNS responder");

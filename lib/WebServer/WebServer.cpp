@@ -10,7 +10,9 @@ WebServer::WebServer()
 WebServer::~WebServer()
 {}
 
-void WebServer::start() {
+void WebServer::start(State* state) {
+  mState = state;
+
   mServer.onNotFound(std::bind(&WebServer::handleNotFound, this));
   mServer.on("/index.css", std::bind(&WebServer::handleIndexCSS, this));
 

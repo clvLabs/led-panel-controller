@@ -6,6 +6,7 @@
 #include "Network.h"
 #include "WebServer.h"
 #include "Panel.h"
+#include "State.h"
 
 class LEDPanelController
 {
@@ -28,6 +29,5 @@ private:
   Network network;
   WebServer webServer;
   Panel panel;
-
-  uint8_t miLevel;
+  State mState;
 };
