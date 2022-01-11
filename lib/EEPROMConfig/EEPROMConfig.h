@@ -6,7 +6,7 @@ struct _EEPROMConfigData
 	// Program EEPROM signature (internal)
 	uint16_t _programSignature;
 
-	// Current dim level
+	// Default dim level
 	uint8_t level;
 };
 
