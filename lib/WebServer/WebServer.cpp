@@ -43,6 +43,7 @@ void WebServer::sendRedirect() {
   page += "<head>";
   page += "<meta http-equiv=\"Refresh\" content=\"0; URL=/\">";
   page += "</head>";
+  mServer.keepAlive(false);
   mServer.send(200, "text/html", page);
 }
 
@@ -67,6 +68,7 @@ void WebServer::handleHome() {
   page += "<button type='button' title='hi' onclick='window.location = \"/hi\";'>hi</button>";
 
   page += "</body>";
+  mServer.keepAlive(false);
   mServer.send(200, "text/html", page);
 }
 
@@ -119,6 +121,7 @@ void WebServer::handleInfo() {
   page += "</ul>";
 
   page += "</body>";
+  mServer.keepAlive(false);
   mServer.send(200, "text/html", page);
 }
 
@@ -145,6 +148,7 @@ void WebServer::handleLevel() {
     }
   }
 
+mServer.keepAlive(false);
   mServer.send(400, "text/plain", "Bad request");
 }
 
@@ -160,13 +164,16 @@ void WebServer::handleDefault() {
     }
   }
 
+mServer.keepAlive(false);
   mServer.send(400, "text/plain", "Bad request");
 }
 
 void WebServer::handleNotFound() {
+  mServer.keepAlive(false);
   mServer.send(404, "text/plain", "Not found");
 }
 
 void WebServer::handleIndexCSS() {
+  mServer.keepAlive(false);
   mServer.send(200, "text/css", INDEX_CSS);
 }
