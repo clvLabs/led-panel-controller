@@ -33,8 +33,12 @@ The device will expose its state in the `MDNS_NAME/MQTT_STATUS_TOPIC` (e.g. `led
     "lightLevel": {
       "current": 75,
       "default": 100,
+    },
     "network": {
       "rssi": -59
+    },
+    "misc": {
+      "uptime": 120
     }
  }
 ```
@@ -43,6 +47,8 @@ The device will expose its state in the `MDNS_NAME/MQTT_STATUS_TOPIC` (e.g. `led
   * `default`: default level
 * `network`: network connection status
   * `rssi`: current RSSI value
+* `misc`: miscellaneous status
+  * `uptime`: number of seconds the board has been `ON` (overflows/resets about every 49 days)
 
 
 ## Setup

@@ -97,6 +97,10 @@ String MQTT::getStatusMsg() {
   str +=    "\"network\": {";
   str +=      "\"rssi\": ";
   str +=        mState->mNetwork.miRSSI;
+  str +=    "},";
+  str +=    "\"misc\": {";
+  str +=      "\"uptime\": ";
+  str +=        millis() / 1000;
   str +=    "}";
   str += "}";
 
