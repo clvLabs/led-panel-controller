@@ -44,12 +44,11 @@ void LEDPanelController::loop() {
 void LEDPanelController::onNetworkConnect() {
   mWebServer.start(&mState);
   mMQTT.start(&mState);
-  Serial.println("Ready");
+  Serial.println("[Main] Ready");
   mStatusLED.listening();
 }
 
 void LEDPanelController::onNetworkDisconnect() {
-  Serial.println("NETWORK CONNECTION LOST !!! ");
   mStatusLED.connecting();
 }
 

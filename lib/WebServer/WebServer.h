@@ -27,7 +27,7 @@ private:
   void handleHome();
   void handleInfo();
   void handleReboot();
-  void handlePresetLevel(uint8_t level);
+  void handlePresetLevel(const char* route, uint8_t level);
   void handleLevel();
   void handleDefault();
 };

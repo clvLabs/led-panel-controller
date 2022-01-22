@@ -5,6 +5,7 @@
 
 WebServer::WebServer()
 : onChangeLevel(nullptr)
+, onChangeDefault(nullptr)
 {}
 
 WebServer::~WebServer()
@@ -19,18 +20,18 @@ void WebServer::start(State* state) {
   mServer.on("/", std::bind(&WebServer::handleHome, this));
   mServer.on("/info", std::bind(&WebServer::handleInfo, this));
 
-  mServer.on("/do/on", std::bind(&WebServer::handlePresetLevel,  this, 100));
-  mServer.on("/do/off", std::bind(&WebServer::handlePresetLevel, this, 0));
-  mServer.on("/do/lo", std::bind(&WebServer::handlePresetLevel,  this, 1));
-  mServer.on("/do/med", std::bind(&WebServer::handlePresetLevel, this, 50));
-  mServer.on("/do/hi", std::bind(&WebServer::handlePresetLevel,  this, 100));
+  mServer.on("/do/on", std::bind(&WebServer::handlePresetLevel,  this, "/do/on", 100));
+  mServer.on("/do/off", std::bind(&WebServer::handlePresetLevel, this, "/do/off", 0));
+  mServer.on("/do/lo", std::bind(&WebServer::handlePresetLevel,  this, "/do/lo", 1));
+  mServer.on("/do/med", std::bind(&WebServer::handlePresetLevel, this, "/do/med", 50));
+  mServer.on("/do/hi", std::bind(&WebServer::handlePresetLevel,  this, "/do/hi", 100));
   mServer.on("/do/reboot", std::bind(&WebServer::handleReboot, this));
 
   mServer.on("/set/level", std::bind(&WebServer::handleLevel, this));
   mServer.on("/set/default", std::bind(&WebServer::handleDefault, this));
 
   mServer.begin(mState->mWeb.miPort);
-  Serial.print("Web server started on port ");
+  Serial.print("[WebServer] Started on port ");
   Serial.println(mState->mWeb.miPort);
 }
 
@@ -126,11 +127,16 @@ void WebServer::handleInfo() {
 }
 
 void WebServer::handleReboot() {
+  Serial.println("[WebServer] Received do/reboot - WARNING: Rebooting as requested.");
   Serial.println("WARNING: Rebooting as requested via web.");
   ESP.reset();
 }
 
-void WebServer::handlePresetLevel(uint8_t level) {
+void WebServer::handlePresetLevel(const char* route, uint8_t level) {
+  Serial.print("[WebServer] Received ");
+  Serial.print(route);
+  Serial.print(" - new level: ");
+  Serial.println(level);
   if (onChangeLevel)
     onChangeLevel(level);
   sendRedirect();
@@ -139,6 +145,8 @@ void WebServer::handlePresetLevel(uint8_t level) {
 void WebServer::handleLevel() {
   for (uint8_t i = 0; i < mServer.args(); i++) {
     if (mServer.argName(i) == "value") {
+      Serial.print("[WebServer] Received set/level - payload: ");
+      Serial.println(mServer.arg(i));
       if (onChangeLevel) {
         uint8_t level = (uint8_t) mServer.arg(i).toInt();
         onChangeLevel(level);
@@ -155,6 +163,8 @@ mServer.keepAlive(false);
 void WebServer::handleDefault() {
   for (uint8_t i = 0; i < mServer.args(); i++) {
     if (mServer.argName(i) == "value") {
+      Serial.print("[WebServer] Received set/default - payload: ");
+      Serial.println(mServer.arg(i));
       if (onChangeDefault) {
         uint8_t level = (uint8_t) mServer.arg(i).toInt();
         onChangeDefault(level);

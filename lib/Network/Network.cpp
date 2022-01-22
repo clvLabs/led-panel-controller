@@ -7,7 +7,9 @@
 #include "Network.h"
 
 Network::Network()
-: mbConnecting(false)
+: onConnect(nullptr)
+, onDisconnect(nullptr)
+, mbConnecting(false)
 , miLastConnectionCheck(0)
 {}
 
@@ -17,7 +19,7 @@ Network::~Network()
 void Network::start(State* state) {
   mState = state;
 
-  Serial.println("Starting network");
+  Serial.println("[Network] Starting");
   WiFi.mode(WIFI_STA);
   WiFi.setAutoConnect(true);
   WiFi.persistent(true);
@@ -39,11 +41,11 @@ void Network::loop() {
 }
 
 void Network::printConnectionInfo() {
-    Serial.print("Connected to ");
+    Serial.print("[Network] Connected to ");
     Serial.println(WIFI_SSID);
-    Serial.print("IP address: ");
+    Serial.print("[Network] IP address: ");
     Serial.println(localIP());
-    Serial.print("RSSI: ");
+    Serial.print("[Network] RSSI: ");
     Serial.println(WiFi.RSSI());
 }
 
@@ -110,6 +112,8 @@ bool Network::checkDisconnection() {
       mState->mNetwork.mbConnected = false;
       mState->mNetwork.miRSSI = 255;
 
+      Serial.println("[Network] Connection LOST !!");
+
       if (onDisconnect)
         onDisconnect();
 
@@ -121,14 +125,14 @@ bool Network::checkDisconnection() {
 }
 
 void Network::startMDNS() {
-  Serial.println("Starting MDNS responder as: " MDNS_NAME "." MDNS_NETWORK);
+  Serial.println("[MDNS] Starting responder as: " MDNS_NAME "." MDNS_NETWORK);
 
   mState->mNetwork.mbMDNSStarted = MDNS.begin(MDNS_NAME);
 
   if (mState->mNetwork.mbMDNSStarted) {
-    Serial.println("MDNS responder started successfully");
+    Serial.println("[MDNS] Responder started successfully");
   } else {
-    Serial.println("COULDN'T start MDNS responder");
+    Serial.println("[MDNS] COULDN'T start responder");
   }
 }
 
@@ -146,7 +150,7 @@ void Network::startOTA() {
   });
 
   ArduinoOTA.onError([](ota_error_t error) {
-    Serial.printf("Error[%u]: ", error);
+    Serial.printf("[OTA] Error[%u]: ", error);
     if (error == OTA_AUTH_ERROR)         Serial.println("[OTA] Auth Failed");
     else if (error == OTA_BEGIN_ERROR)   Serial.println("[OTA] Begin Failed");
     else if (error == OTA_CONNECT_ERROR) Serial.println("[OTA] Connect Failed");
@@ -154,7 +158,7 @@ void Network::startOTA() {
     else if (error == OTA_END_ERROR)     Serial.println("[OTA] End Failed");
   });
 
-  Serial.println("Starting OTA server");
+  Serial.println("[OTA] Starting server");
   ArduinoOTA.setPort(OTA_PORT);
   ArduinoOTA.setHostname(MDNS_NAME);
   ArduinoOTA.setPassword(OTA_PASSWORD);
