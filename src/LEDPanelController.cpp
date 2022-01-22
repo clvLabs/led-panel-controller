@@ -27,6 +27,9 @@ void LEDPanelController::start() {
 
   mWebServer.onChangeLevel = std::bind(&LEDPanelController::onWebServerChangeLevel, this, std::placeholders::_1);
   mWebServer.onChangeDefault = std::bind(&LEDPanelController::onWebServerChangeDefault, this, std::placeholders::_1);
+
+  mMQTT.onChangeLevel = std::bind(&LEDPanelController::onMQTTChangeLevel, this, std::placeholders::_1);
+  mMQTT.onChangeDefault = std::bind(&LEDPanelController::onMQTTChangeDefault, this, std::placeholders::_1);
 }
 
 void LEDPanelController::loop() {
@@ -50,25 +53,37 @@ void LEDPanelController::onNetworkDisconnect() {
   mStatusLED.connecting();
 }
 
-void LEDPanelController::onWebServerChangeLevel(uint8_t level) {
+void LEDPanelController::onChangeLevel(uint8_t level) {
   if (level == mState.mLightLevel.miCurrent)
     return;
 
   mState.mLightLevel.miCurrent = level;
   mPanel.setLevel(mState.mLightLevel.miCurrent);
-  Serial.print("Level changed by web request: ");
-  Serial.println(mState.mLightLevel.miCurrent);
   mStatusLED.commandReceived();
 }
 
-void LEDPanelController::onWebServerChangeDefault(uint8_t level) {
+void LEDPanelController::onChangeDefault(uint8_t level) {
   if (level == mState.mLightLevel.miDefault)
     return;
 
   mState.mLightLevel.miDefault = level;
   mEEPROMCfg.data.defaultDimLevel = level;
   mEEPROMCfg.write();
-  Serial.print("Default level changed by web request: ");
-  Serial.println(mState.mLightLevel.miDefault);
   mStatusLED.commandReceived();
+}
+
+void LEDPanelController::onWebServerChangeLevel(uint8_t level) {
+  onChangeLevel(level);
+}
+
+void LEDPanelController::onWebServerChangeDefault(uint8_t level) {
+  onChangeDefault(level);
+}
+
+void LEDPanelController::onMQTTChangeLevel(uint8_t level) {
+  onChangeLevel(level);
+}
+
+void LEDPanelController::onMQTTChangeDefault(uint8_t level) {
+  onChangeDefault(level);
 }

@@ -22,8 +22,14 @@ private:
   void onNetworkConnect();
   void onNetworkDisconnect();
 
+  void onChangeLevel(uint8_t level);
+  void onChangeDefault(uint8_t level);
+
   void onWebServerChangeLevel(uint8_t level);
   void onWebServerChangeDefault(uint8_t level);
+
+  void onMQTTChangeLevel(uint8_t level);
+  void onMQTTChangeDefault(uint8_t level);
 
   EEPROMConfig mEEPROMCfg;
   StatusLED mStatusLED;
