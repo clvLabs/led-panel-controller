@@ -16,14 +16,14 @@ The following examples assume a controller configured as `led-panel-1.local`.
 * At `http://led-panel-1.local/info` you'll find status info.
 
 Besides that, the controller accepts a few `GET` routes:
-* `http://led-panel-1.local/on`: Turn the light on at maximum value (same as `max`).
-* `http://led-panel-1.local/off`: Turn the light off.
-* `http://led-panel-1.local/lo`: Turn the light on at minimum value.
-* `http://led-panel-1.local/med`: Turn the light on at medium value.
-* `http://led-panel-1.local/hi`: Turn the light on at maximum value (same as `on`).
-* `http://led-panel-1.local/level?value=75`: Turn the light on at 75%.
-* `http://led-panel-1.local/default?value=50`: Set the default level (for startup) at 50%.
-* `http://led-panel-1.local/reboot`: Reboot the module.
+* `http://led-panel-1.local/do/on`: Turn the light on at maximum value (same as `max`).
+* `http://led-panel-1.local/do/off`: Turn the light off.
+* `http://led-panel-1.local/do/lo`: Turn the light on at minimum value.
+* `http://led-panel-1.local/do/med`: Turn the light on at medium value.
+* `http://led-panel-1.local/do/hi`: Turn the light on at maximum value (same as `on`).
+* `http://led-panel-1.local/do/reboot`: Reboot the module.
+* `http://led-panel-1.local/set/level?value=75`: Turn the light on at 75%.
+* `http://led-panel-1.local/set/default?value=50`: Set the default level (for startup) at 50%.
 
 ### MQTT
 

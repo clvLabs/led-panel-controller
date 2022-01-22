@@ -18,16 +18,16 @@ void WebServer::start(State* state) {
 
   mServer.on("/", std::bind(&WebServer::handleHome, this));
   mServer.on("/info", std::bind(&WebServer::handleInfo, this));
-  mServer.on("/reboot", std::bind(&WebServer::handleReboot, this));
 
-  mServer.on("/on", std::bind(&WebServer::handlePresetLevel,  this, 100));
-  mServer.on("/off", std::bind(&WebServer::handlePresetLevel, this, 0));
-  mServer.on("/lo", std::bind(&WebServer::handlePresetLevel,  this, 1));
-  mServer.on("/med", std::bind(&WebServer::handlePresetLevel, this, 50));
-  mServer.on("/hi", std::bind(&WebServer::handlePresetLevel,  this, 100));
+  mServer.on("/do/on", std::bind(&WebServer::handlePresetLevel,  this, 100));
+  mServer.on("/do/off", std::bind(&WebServer::handlePresetLevel, this, 0));
+  mServer.on("/do/lo", std::bind(&WebServer::handlePresetLevel,  this, 1));
+  mServer.on("/do/med", std::bind(&WebServer::handlePresetLevel, this, 50));
+  mServer.on("/do/hi", std::bind(&WebServer::handlePresetLevel,  this, 100));
+  mServer.on("/do/reboot", std::bind(&WebServer::handleReboot, this));
 
-  mServer.on("/level", std::bind(&WebServer::handleLevel, this));
-  mServer.on("/default", std::bind(&WebServer::handleDefault, this));
+  mServer.on("/set/level", std::bind(&WebServer::handleLevel, this));
+  mServer.on("/set/default", std::bind(&WebServer::handleDefault, this));
 
   mServer.begin(mState->mWeb.miPort);
   Serial.print("Web server started on port ");
@@ -61,11 +61,11 @@ void WebServer::handleHome() {
   page += mState->mNetwork.msMDNSNetwork;
   page += "</h1>";
 
-  page += "<button type='button' title='ON' onclick='window.location = \"/on\";'>ON</button>";
-  page += "<button type='button' title='OFF' onclick='window.location = \"/off\";'>OFF</button>";
-  page += "<button type='button' title='lo' onclick='window.location = \"/lo\";'>lo</button>";
-  page += "<button type='button' title='med' onclick='window.location = \"/med\";'>med</button>";
-  page += "<button type='button' title='hi' onclick='window.location = \"/hi\";'>hi</button>";
+  page += "<button type='button' title='ON' onclick='window.location = \"/do/on\";'>ON</button>";
+  page += "<button type='button' title='OFF' onclick='window.location = \"/do/off\";'>OFF</button>";
+  page += "<button type='button' title='lo' onclick='window.location = \"/do/lo\";'>lo</button>";
+  page += "<button type='button' title='med' onclick='window.location = \"/do/med\";'>med</button>";
+  page += "<button type='button' title='hi' onclick='window.location = \"/do/hi\";'>hi</button>";
 
   page += "</body>";
   mServer.keepAlive(false);
