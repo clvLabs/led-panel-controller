@@ -74,8 +74,7 @@ $ cp platformio.sample.ini platformio.ini
 #define PWM_DIM_PIN (14)
 
 // PWM settings
-#define PWM_MIN_VALUE (26)
-#define PWM_MAX_VALUE (255)
+#define PWM_ON_THRESHOLD (179)
 
 // DEMO Jumper pin
 #define DEMO_JUMPER_PIN (13)
@@ -95,8 +94,7 @@ $ cp platformio.sample.ini platformio.ini
 * `RELAY_RST_PIN`: `ESP8266 GPIO` pin to use for the relay's `RESET` coil.
 * `RELAY_COIL_ACTIVATION_TIME`: time (ms) to keep the relay's coil activated (see relay's datasheet).
 * `PWM_DIM_PIN`: `ESP8266 GPIO` pin to use for the `PWM` dimmer.
-* `PWM_MIN_VALUE`: Minimum `PWM` value accepted by the LED Panel driver.
-* `PWM_MAX_VALUE`: Maximum `PWM` value accepted by the LED Panel driver.
+* `PWM_ON_THRESHOLD`: Maximum `PWM` value that makes the LED Panel driver turn the light ON (see comment in `Dimmer.cpp`).
 * `DEMO_JUMPER_PIN`: `ESP8266 GPIO` pin to use for the `demo mode`.
 
 

@@ -37,8 +37,7 @@
 #define PWM_DIM_PIN (14)
 
 // PWM settings
-#define PWM_MIN_VALUE (26)
-#define PWM_MAX_VALUE (255)
+#define PWM_ON_THRESHOLD (179)
 
 // DEMO Jumper pin
 #define DEMO_JUMPER_PIN (13)
