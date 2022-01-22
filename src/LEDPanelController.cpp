@@ -27,7 +27,6 @@ void LEDPanelController::start() {
 
   mWebServer.onChangeLevel = std::bind(&LEDPanelController::onWebServerChangeLevel, this, std::placeholders::_1);
   mWebServer.onChangeDefault = std::bind(&LEDPanelController::onWebServerChangeDefault, this, std::placeholders::_1);
-  mWebServer.start(&mState);
 }
 
 void LEDPanelController::loop() {
@@ -35,11 +34,14 @@ void LEDPanelController::loop() {
   mWebServer.loop();
   mStatusLED.loop();
   mPanel.loop();
-  delay(10);
+  mMQTT.loop();
+  delay(1);
 }
 
 void LEDPanelController::onNetworkConnect() {
-  Serial.println("Listening");
+  mWebServer.start(&mState);
+  mMQTT.start(&mState);
+  Serial.println("Ready");
   mStatusLED.listening();
 }
 

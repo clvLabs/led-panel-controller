@@ -4,15 +4,16 @@ WiFi controller for LED panel fixtures.
 
 **NOTE: this project is still at its initial development stage.**
 
-## usage
+## Usage
 
-### web interface
+### Web interface
 
 Each instance of the controller exposes a web interface.
 
 The following examples assume a controller configured as `led-panel-1.local`.
 
-At `http://led-panel-1.local/` a web page is returned with some basic controls.
+* At `http://led-panel-1.local/` you'll find some basic controls.
+* At `http://led-panel-1.local/info` you'll find status info.
 
 Besides that, the controller accepts a few `GET` routes:
 * `http://led-panel-1.local/on`: Turn the light on at maximum value (same as `max`).
@@ -24,7 +25,29 @@ Besides that, the controller accepts a few `GET` routes:
 * `http://led-panel-1.local/default?value=50`: Set the default level (for startup) at 50%.
 * `http://led-panel-1.local/reboot`: Reboot the module.
 
-## setup
+### MQTT
+
+The device will expose its state in the `MDNS_NAME/MQTT_STATUS_TOPIC` (e.g. `led-panel-1/status`) topic as a `json` object:
+```json
+ {
+    "lightLevel": {
+      "current": 75,
+      "default": 100,
+    "network": {
+      "rssi": -59
+    }
+ }
+```
+* `lightLevel`: light dimmer status
+  * `current`: current level
+  * `default`: default level
+* `network`: network connection status
+  * `rssi`: current RSSI value
+
+
+## Setup
+
+This project is built using [PlatformIO](https://platformio.org/), but I'm sure you can build it with the vanilla Arduino IDE and some patience if you want to :)
 
 Once the project is cloned, copy the template files and edit them to set your configuration.
 
@@ -34,52 +57,6 @@ $ cp platformio.sample.ini platformio.ini
 ```
 
 ### config.h
-```c
-// config.h
-// led-panel-controller settings
-#pragma once
-
-// WiFi settings
-#define WIFI_SSID      "my-wifi-network"
-#define WIFI_PASSWORD  "my-password"
-
-// Delay(ms) between network connectivity checks (once connected)
-#define NETWORK_CONNECTION_CHECK_DELAY  (10000)
-
-// ID of the LED panel (for multiple panel setups)
-#define PANEL_ID  "1"
-
-// Default light level for this panel at startup (0-100%)
-#define PANEL_DEFAULT_LEVEL  (100)
-
-// MDNS settings
-#define MDNS_NAME    "led-panel-" PANEL_ID
-#define MDNS_NETWORK "local"
-
-// Web server settings
-#define WEB_SERVER_PORT (80)
-
-// OTA settings
-#define OTA_PORT (8266)
-#define OTA_PASSWORD "my-ota-password"
-
-// Relay coil pins
-#define RELAY_SET_PIN (4)
-#define RELAY_RST_PIN (5)
-
-// Relay coil activation time(ms) (see relay datasheet)
-#define RELAY_COIL_ACTIVATION_TIME (40)
-
-// PWM DIM pin
-#define PWM_DIM_PIN (14)
-
-// PWM settings
-#define PWM_ON_THRESHOLD (179)
-
-// DEMO Jumper pin
-#define DEMO_JUMPER_PIN (13)
-```
-
 * `WIFI_SSID`: The name of your WiFi network.
 * `WIFI_PASSWORD`: Password to connect to the network.
 * `NETWORK_CONNECTION_CHECK_DELAY`: While connected, the program will make sure connection is up. This is the delay in milliseconds.
@@ -88,6 +65,10 @@ $ cp platformio.sample.ini platformio.ini
 * `MDNS_NAME`: Name for this device in the network.
 * `MDNS_NETWORK`: Local network name.
 * `WEB_SERVER_PORT`: TCP port for the web server.
+* `MQTT_SERVER`: MQTT server.
+* `MQTT_PORT`: MQTT port.
+* `MQTT_RECONNECT_DELAY`: Delay (ms) between `MQTT` reconnection attempts.
+* `*MQTT_STATUS_TOPIC`: Topic for the status messages.
 * `OTA_PORT`: UDP port for [ArduinoOTA](https://www.arduino.cc/reference/en/libraries/arduinoota/).
 * `OTA_PASSWORD`: Password for OTA updates.
 * `RELAY_SET_PIN`: `ESP8266 GPIO` pin to use for the relay's `SET` coil.
@@ -99,19 +80,6 @@ $ cp platformio.sample.ini platformio.ini
 
 
 ### platformio.ini
-```ini
-[env:esp12e]
-platform = espressif8266
-board = esp12e
-framework = arduino
-monitor_speed = 115200
-upload_protocol = espota
-upload_port = led-panel-1.local
-upload_flags =
-    --port=8266
-    --auth=my-ota-password
-```
-
 * `upload_port`: your device's `MDNS` full name (based on `MDNS_NAME` / `PANEL_ID` / `MDNS_NETWORK`).
 * `upload_flags:`:
   * `--port`: set to the same value as `OTA_PORT`.

@@ -22,6 +22,12 @@
 // Web server settings
 #define WEB_SERVER_PORT (80)
 
+// MQTT settings
+#define MQTT_SERVER "my-mqtt-server.local"
+#define MQTT_PORT  (1883)
+#define MQTT_RECONNECT_DELAY  (10000)
+#define MQTT_STATUS_TOPIC "status"
+
 // OTA settings
 #define OTA_PORT (8266)
 #define OTA_PASSWORD "my-ota-password"

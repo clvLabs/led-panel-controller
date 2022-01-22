@@ -7,6 +7,7 @@
 #include "WebServer.h"
 #include "Panel.h"
 #include "State.h"
+#include "MQTT.h"
 
 class LEDPanelController
 {
@@ -30,4 +31,5 @@ private:
   WebServer mWebServer;
   Panel mPanel;
   State mState;
+  MQTT mMQTT;
 };
