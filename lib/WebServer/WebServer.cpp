@@ -25,6 +25,8 @@ void WebServer::start(State* state) {
   mServer.on("/do/lo", std::bind(&WebServer::handlePresetLevel,  this, "/do/lo", 1));
   mServer.on("/do/med", std::bind(&WebServer::handlePresetLevel, this, "/do/med", 50));
   mServer.on("/do/hi", std::bind(&WebServer::handlePresetLevel,  this, "/do/hi", 100));
+  mServer.on("/do/up", std::bind(&WebServer::handleUp, this));
+  mServer.on("/do/down", std::bind(&WebServer::handleDown, this));
   mServer.on("/do/reboot", std::bind(&WebServer::handleReboot, this));
 
   mServer.on("/set/level", std::bind(&WebServer::handleLevel, this));
@@ -64,9 +66,16 @@ void WebServer::handleHome() {
 
   page += "<button type='button' title='ON' onclick='window.location = \"/do/on\";'>ON</button>";
   page += "<button type='button' title='OFF' onclick='window.location = \"/do/off\";'>OFF</button>";
-  page += "<button type='button' title='lo' onclick='window.location = \"/do/lo\";'>lo</button>";
-  page += "<button type='button' title='med' onclick='window.location = \"/do/med\";'>med</button>";
-  page += "<button type='button' title='hi' onclick='window.location = \"/do/hi\";'>hi</button>";
+  page += "<p/>";
+
+  page += "<button type='button' title='lo' onclick='window.location = \"/do/lo\";'>1%</button>";
+  page += "<button type='button' title='med' onclick='window.location = \"/do/med\";'>50%</button>";
+  page += "<button type='button' title='hi' onclick='window.location = \"/do/hi\";'>100%</button>";
+  page += "<p/>";
+
+  page += "<button type='button' title='down' onclick='window.location = \"/do/down\";'>- 10%</button>";
+  page += "<button type='button' title='up' onclick='window.location = \"/do/up\";'>+ 10%</button>";
+  page += "<p/>";
 
   page += "</body>";
   mServer.keepAlive(false);
@@ -124,6 +133,38 @@ void WebServer::handleInfo() {
   page += "</body>";
   mServer.keepAlive(false);
   mServer.send(200, "text/html", page);
+}
+
+void WebServer::handleUp() {
+  uint8_t level;
+  if (mState->mLightLevel.miCurrent >= 90)
+    level = 100;
+  else
+    level = mState->mLightLevel.miCurrent + 10;
+
+  Serial.print("[WebServer] Received do/up - new level: ");
+  Serial.println(level);
+
+  if (onChangeLevel)
+    onChangeLevel(level);
+
+  sendRedirect();
+}
+
+void WebServer::handleDown() {
+  uint8_t level;
+  if (mState->mLightLevel.miCurrent <= 10)
+    level = 0;
+  else
+    level = mState->mLightLevel.miCurrent - 10;
+
+  Serial.print("[WebServer] Received do/down - new level: ");
+  Serial.println(level);
+
+  if (onChangeLevel)
+    onChangeLevel(level);
+
+  sendRedirect();
 }
 
 void WebServer::handleReboot() {

@@ -93,6 +93,10 @@ void MQTT::onMQTTMessage(char* topic, uint8_t* payload, unsigned int length) {
     onMQTT_do_med(payload, length);
   else if (!strncmp(subtopic, "/do/hi", 6))
     onMQTT_do_hi(payload, length);
+  else if (!strncmp(subtopic, "/do/up", 6))
+    onMQTT_do_up(payload, length);
+  else if (!strncmp(subtopic, "/do/down", 8))
+    onMQTT_do_down(payload, length);
   else if (!strncmp(subtopic, "/do/reboot", 10))
     onMQTT_do_reboot(payload, length);
   else if (!strncmp(subtopic, "/set/level", 10))
@@ -138,6 +142,34 @@ void MQTT::onMQTT_do_hi(uint8_t* payload, unsigned int length) {
   Serial.println("[MQTT] Received do/hi - new level: 100");
   if (onChangeLevel)
     onChangeLevel(100);
+}
+
+void MQTT::onMQTT_do_up(uint8_t* payload, unsigned int length) {
+  uint8_t level;
+  if (mState->mLightLevel.miCurrent >= 90)
+    level = 100;
+  else
+    level = mState->mLightLevel.miCurrent + 10;
+
+  Serial.print("[MQTT] Received do/up - new level: ");
+  Serial.println(level);
+
+  if (onChangeLevel)
+    onChangeLevel(level);
+}
+
+void MQTT::onMQTT_do_down(uint8_t* payload, unsigned int length) {
+  uint8_t level;
+  if (mState->mLightLevel.miCurrent <= 10)
+    level = 0;
+  else
+    level = mState->mLightLevel.miCurrent - 10;
+
+  Serial.print("[MQTT] Received do/down - new level: ");
+  Serial.println(level);
+
+  if (onChangeLevel)
+    onChangeLevel(level);
 }
 
 void MQTT::onMQTT_do_reboot(uint8_t* payload, unsigned int length) {

@@ -21,6 +21,8 @@ Besides that, the controller accepts a few `GET` routes:
 * `http://led-panel-1.local/do/lo`: Turn the light on at minimum value.
 * `http://led-panel-1.local/do/med`: Turn the light on at medium value.
 * `http://led-panel-1.local/do/hi`: Turn the light on at maximum value (same as `on`).
+* `http://led-panel-1.local/do/up`: Increase the light level by 10%.
+* `http://led-panel-1.local/do/down`: Decrease the light level by 10%
 * `http://led-panel-1.local/do/reboot`: Reboot the module.
 * `http://led-panel-1.local/set/level?value=75`: Turn the light on at 75%.
 * `http://led-panel-1.local/set/default?value=50`: Set the default level (for startup) at 50%.
@@ -56,6 +58,8 @@ As with the Web server, other `topics` are available to control the module:
 * `led-panel-1/do/lo`
 * `led-panel-1/do/med`
 * `led-panel-1/do/hi`
+* `led-panel-1/do/up`
+* `led-panel-1/do/down`
 * `led-panel-1/do/reboot`
 * `led-panel-1/set/level` (value must be sent as payload)
 * `led-panel-1/set/default` (value must be sent as payload)

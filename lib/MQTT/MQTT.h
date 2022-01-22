@@ -31,6 +31,8 @@ private:
   void onMQTT_do_lo(uint8_t* payload, unsigned int length);
   void onMQTT_do_med(uint8_t* payload, unsigned int length);
   void onMQTT_do_hi(uint8_t* payload, unsigned int length);
+  void onMQTT_do_up(uint8_t* payload, unsigned int length);
+  void onMQTT_do_down(uint8_t* payload, unsigned int length);
   void onMQTT_do_reboot(uint8_t* payload, unsigned int length);
   void onMQTT_set_level(uint8_t* payload, unsigned int length);
   void onMQTT_set_default(uint8_t* payload, unsigned int length);
