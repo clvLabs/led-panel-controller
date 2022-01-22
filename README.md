@@ -27,7 +27,7 @@ Besides that, the controller accepts a few `GET` routes:
 
 ### MQTT
 
-The device will expose its state in the `MDNS_NAME/MQTT_STATUS_TOPIC` (e.g. `led-panel-1/status`) topic as a `json` object:
+The device will publish its state every second in the `MDNS_NAME/MQTT_STATUS_TOPIC` (e.g. `led-panel-1/status`) topic as a `json` object:
 ```json
  {
     "lightLevel": {
@@ -50,6 +50,15 @@ The device will expose its state in the `MDNS_NAME/MQTT_STATUS_TOPIC` (e.g. `led
 * `misc`: miscellaneous status
   * `uptime`: number of seconds the board has been `ON` (overflows/resets about every 49 days)
 
+As with the Web server, other `topics` are available to control the module:
+* `led-panel-1/do/on`
+* `led-panel-1/do/off`
+* `led-panel-1/do/lo`
+* `led-panel-1/do/med`
+* `led-panel-1/do/hi`
+* `led-panel-1/do/reboot`
+* `led-panel-1/set/level` (value must be sent as payload)
+* `led-panel-1/set/default` (value must be sent as payload)
 
 ## Setup
 
