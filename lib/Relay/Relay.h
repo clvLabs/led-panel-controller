@@ -18,8 +18,10 @@ private:
   bool mbOn;
   bool mbCoilActive;
   uint32_t miCoilActivationTime;
+  unsigned long miLastStateChange;
+  bool mbThrottledValueWaiting;
+  bool mbThrottledValue;
 
-  void _on();
-  void _off();
+  void _setState(bool state);
   void _checkCoil();
 };

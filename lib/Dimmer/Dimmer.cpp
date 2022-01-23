@@ -19,6 +19,9 @@
 Dimmer::Dimmer()
 : miPin(PWM_DIM_PIN)
 , miLevel(0)
+, miLastStateChange(0)
+, mbThrottledValueWaiting(false)
+, miThrottledValue(0)
 {}
 
 Dimmer::~Dimmer() {}
@@ -27,13 +30,25 @@ void Dimmer::start() {
   pinMode(miPin, OUTPUT);
 }
 
-void Dimmer::loop() {}
+void Dimmer::loop() {
+  if (mbThrottledValueWaiting && miLastStateChange + PWM_FASTEST_CHANGE <= millis()) {
+    mbThrottledValueWaiting = false;
+    setLevel(miThrottledValue);
+  }
+}
 
 void Dimmer::setLevel(uint8_t level) {
   if (level > 100)
     level = 100;
 
+  if (miLastStateChange + PWM_FASTEST_CHANGE > millis()) {
+    mbThrottledValueWaiting = true;
+    miThrottledValue = level;
+    return;
+  }
+
   miLevel = level;
+  miLastStateChange = millis();
 
   uint8_t pwmLevel = 0;
 

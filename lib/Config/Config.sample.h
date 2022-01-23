@@ -39,11 +39,17 @@
 // Relay coil activation time(ms) (see relay datasheet)
 #define RELAY_COIL_ACTIVATION_TIME (40)
 
+// Relay "throttling" (avoiding too many fast changes)
+#define RELAY_FASTEST_CHANGE (1000)
+
 // PWM DIM pin
 #define PWM_DIM_PIN (14)
 
 // PWM settings
 #define PWM_ON_THRESHOLD (179)
+
+// PWM "throttling" (avoiding too many fast changes)
+#define PWM_FASTEST_CHANGE (50)
 
 // DEMO Jumper pin
 #define DEMO_JUMPER_PIN (15)

@@ -93,8 +93,10 @@ $ cp platformio.sample.ini platformio.ini
 * `RELAY_SET_PIN`: `ESP8266 GPIO` pin to use for the relay's `SET` coil.
 * `RELAY_RST_PIN`: `ESP8266 GPIO` pin to use for the relay's `RESET` coil.
 * `RELAY_COIL_ACTIVATION_TIME`: time (ms) to keep the relay's coil activated (see relay's datasheet).
+* `RELAY_FASTEST_CHANGE`: minimum time (ms) between relay changes (_throttling_).
 * `PWM_DIM_PIN`: `ESP8266 GPIO` pin to use for the `PWM` dimmer.
 * `PWM_ON_THRESHOLD`: Maximum `PWM` value that makes the LED Panel driver turn the light ON (see comment in `Dimmer.cpp`).
+* `PWM_FASTEST_CHANGE`: minimum time (ms) between `PWM` changes (_throttling_).
 * `DEMO_JUMPER_PIN`: `ESP8266 GPIO` pin to use for the `demo mode`.
 
 

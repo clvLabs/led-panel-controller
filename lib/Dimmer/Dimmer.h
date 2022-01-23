@@ -14,4 +14,7 @@ public:
 private:
   uint8_t miPin;
   uint8_t miLevel;
+  unsigned long miLastStateChange;
+  bool mbThrottledValueWaiting;
+  uint8_t miThrottledValue;
 };

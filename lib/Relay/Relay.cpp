@@ -8,6 +8,7 @@ Relay::Relay()
 , mbOn(false)
 , mbCoilActive(false)
 , miCoilActivationTime(0)
+, miLastStateChange(0)
 {}
 
 Relay::~Relay() {}
@@ -16,21 +17,26 @@ void Relay::start() {
   pinMode(miSetPin, OUTPUT);
   pinMode(miRstPin, OUTPUT);
 
-  _off();
+  _setState(false);
 }
 
 void Relay::loop() {
   _checkCoil();
+
+  if (mbThrottledValueWaiting && miLastStateChange + PWM_FASTEST_CHANGE <= millis()) {
+    mbThrottledValueWaiting = false;
+    _setState(mbThrottledValue);
+  }
 }
 
 void Relay::on() {
   if (!mbOn)
-    _on();
+    _setState(true);
 }
 
 void Relay::off() {
   if (mbOn)
-    _off();
+    _setState(false);
 }
 
 void Relay::_checkCoil() {
@@ -44,18 +50,19 @@ void Relay::_checkCoil() {
   }
 }
 
-void Relay::_on() {
-  digitalWrite(miSetPin, HIGH);
-  digitalWrite(miRstPin, LOW);
-  mbOn = true;
-  mbCoilActive = true;
-  miCoilActivationTime = millis();
-}
+void Relay::_setState(bool state) {
 
-void Relay::_off() {
-  digitalWrite(miSetPin, LOW);
-  digitalWrite(miRstPin, HIGH);
-  mbOn = false;
+  if (miLastStateChange + RELAY_FASTEST_CHANGE > millis()) {
+    mbThrottledValueWaiting = true;
+    mbThrottledValue = state;
+    return;
+  }
+
+  digitalWrite(miSetPin, state ? HIGH : LOW);
+  digitalWrite(miRstPin, state ? LOW : HIGH);
+  mbOn = state;
+  miLastStateChange = millis();
+
   mbCoilActive = true;
   miCoilActivationTime = millis();
 }
