@@ -19,6 +19,9 @@ public:
   void loop();
 
 private:
+  void standardLoop();
+  void demoLoop();
+
   void onNetworkConnect();
   void onNetworkDisconnect();
 
@@ -38,4 +41,11 @@ private:
   Panel mPanel;
   State mState;
   MQTT mMQTT;
+
+  unsigned long miNextDemoCheck;
+  unsigned long miNextDemoRSSI;
+  bool mbDemoActive;
+  uint8_t miDemoPhase;
+  uint8_t miDemoIteration;
+  bool mbDemoRampingUp;
 };

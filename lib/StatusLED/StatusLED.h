@@ -15,6 +15,7 @@ public:
   void off();
   void connecting();
   void listening();
+  void demoActive();
   void commandReceived();
 
 private:

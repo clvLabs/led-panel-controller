@@ -46,4 +46,4 @@
 #define PWM_ON_THRESHOLD (179)
 
 // DEMO Jumper pin
-#define DEMO_JUMPER_PIN (13)
+#define DEMO_JUMPER_PIN (15)

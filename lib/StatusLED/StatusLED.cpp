@@ -29,6 +29,10 @@ void StatusLED::listening() {
   mLED.blink(10, 10000);
 }
 
+void StatusLED::demoActive() {
+  mLED.blink(50, 50);
+}
+
 void StatusLED::commandReceived() {
   mLED.flash(100);
 }
