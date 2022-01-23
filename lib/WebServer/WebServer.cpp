@@ -66,6 +66,10 @@ void WebServer::handleHome() {
   page += mState->mNetwork.msMDNSNetwork;
   page += "</h1>";
 
+  page += "Current light level: <b>";
+  page += mState->mLightLevel.miCurrent;
+  page += "</b>%<p/>";
+
   page += "<button type='button' title='ON' onclick='window.location = \"/do/on\";'>ON</button>";
   page += "<button type='button' title='OFF' onclick='window.location = \"/do/off\";'>OFF</button>";
   page += "<p/>";
