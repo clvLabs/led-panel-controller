@@ -90,7 +90,7 @@ $ cp platformio.sample.ini platformio.ini
 * `MQTT_SERVER`: MQTT server.
 * `MQTT_PORT`: MQTT port.
 * `MQTT_RECONNECT_DELAY`: Delay (ms) between `MQTT` reconnection attempts.
-* `*MQTT_STATUS_TOPIC`: Topic for the status messages.
+* `MQTT_STATUS_TOPIC`: Topic for the status messages.
 * `OTA_PORT`: UDP port for [ArduinoOTA](https://www.arduino.cc/reference/en/libraries/arduinoota/).
 * `OTA_PASSWORD`: Password for OTA updates.
 * `RELAY_SET_PIN`: `ESP8266 GPIO` pin to use for the relay's `SET` coil.
