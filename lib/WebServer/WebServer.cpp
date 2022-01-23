@@ -105,6 +105,9 @@ void WebServer::handleInfo() {
   page += "<li>Default: <b>";
   page += mState->mLightLevel.miDefault;
   page += "</b></li>";
+  page += "<li>Fade speed: <b>";
+  page += mState->mLightLevel.miFadeSpeed;
+  page += "</b></li>";
   page += "</ul>";
 
   page += "<h2>Network</h2><ul>";
