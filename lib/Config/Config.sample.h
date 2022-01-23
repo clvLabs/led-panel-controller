@@ -25,7 +25,7 @@
 // MQTT settings
 #define MQTT_SERVER "my-mqtt-server.local"
 #define MQTT_PORT  (1883)
-#define MQTT_RECONNECT_DELAY  (10000)
+#define MQTT_RECONNECT_DELAY  (1000)
 #define MQTT_STATUS_TOPIC "status"
 
 // OTA settings
