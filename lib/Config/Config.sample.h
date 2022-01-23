@@ -33,8 +33,8 @@
 #define OTA_PASSWORD "my-ota-password"
 
 // Relay coil pins
-#define RELAY_SET_PIN (4)
-#define RELAY_RST_PIN (5)
+#define RELAY_SET_PIN (4) // 4 = D2
+#define RELAY_RST_PIN (5) // 5 = D1
 
 // Relay coil activation time(ms) (see relay datasheet)
 #define RELAY_COIL_ACTIVATION_TIME (40)
@@ -43,7 +43,7 @@
 #define RELAY_FASTEST_CHANGE (1000)
 
 // PWM DIM pin
-#define PWM_DIM_PIN (14)
+#define PWM_DIM_PIN (14) // 14 = D5
 
 // PWM settings
 #define PWM_ON_THRESHOLD (179)
@@ -53,4 +53,4 @@
 #define PWM_FASTEST_CHANGE (50)
 
 // DEMO Jumper pin
-#define DEMO_JUMPER_PIN (15)
+#define DEMO_JUMPER_PIN (15) // 15 = D8
