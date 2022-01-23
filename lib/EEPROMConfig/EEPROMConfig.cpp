@@ -5,7 +5,7 @@
 
 
 // Program EEPROM signature
-#define PROGRAM_EEPROM_SIGNATURE	( 2022 )
+#define PROGRAM_EEPROM_SIGNATURE	( 1942 )
 
 
 EEPROMConfig::EEPROMConfig() {
@@ -45,6 +45,7 @@ void EEPROMConfig::init()
 	// Set initial configuration values
 	data._programSignature = PROGRAM_EEPROM_SIGNATURE;
 	data.defaultDimLevel = PANEL_DEFAULT_LEVEL;
+  data.fadeSpeed = PWM_DEFAULT_FADE_SPEED;
 
 	// Write new values to EEPROM
 	write();

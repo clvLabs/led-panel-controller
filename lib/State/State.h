@@ -11,6 +11,7 @@ public:
   struct {
     int miCurrent;
     int miDefault;
+    int miFadeSpeed;
   } mLightLevel;
 
   struct {

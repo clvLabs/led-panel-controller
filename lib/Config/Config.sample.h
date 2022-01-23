@@ -47,6 +47,7 @@
 
 // PWM settings
 #define PWM_ON_THRESHOLD (179)
+#define PWM_DEFAULT_FADE_SPEED (5)
 
 // PWM "throttling" (avoiding too many fast changes)
 #define PWM_FASTEST_CHANGE (50)

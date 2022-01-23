@@ -6,6 +6,7 @@
 WebServer::WebServer()
 : onChangeLevel(nullptr)
 , onChangeDefault(nullptr)
+, onChangeFadeSpeed(nullptr)
 {}
 
 WebServer::~WebServer()
@@ -31,6 +32,7 @@ void WebServer::start(State* state) {
 
   mServer.on("/set/level", std::bind(&WebServer::handleLevel, this));
   mServer.on("/set/default", std::bind(&WebServer::handleDefault, this));
+  mServer.on("/set/fade-speed", std::bind(&WebServer::handleFadeSpeed, this));
 
   mServer.begin(mState->mWeb.miPort);
   Serial.print("[WebServer] Started on port ");
@@ -197,7 +199,7 @@ void WebServer::handleLevel() {
     }
   }
 
-mServer.keepAlive(false);
+  mServer.keepAlive(false);
   mServer.send(400, "text/plain", "Bad request");
 }
 
@@ -215,7 +217,25 @@ void WebServer::handleDefault() {
     }
   }
 
-mServer.keepAlive(false);
+  mServer.keepAlive(false);
+  mServer.send(400, "text/plain", "Bad request");
+}
+
+void WebServer::handleFadeSpeed() {
+  for (uint8_t i = 0; i < mServer.args(); i++) {
+    if (mServer.argName(i) == "value") {
+      Serial.print("[WebServer] Received set/fade-speed - payload: ");
+      Serial.println(mServer.arg(i));
+      if (onChangeFadeSpeed) {
+        uint8_t level = (uint8_t) mServer.arg(i).toInt();
+        onChangeFadeSpeed(level);
+      }
+      sendRedirect();
+      return;
+    }
+  }
+
+  mServer.keepAlive(false);
   mServer.send(400, "text/plain", "Bad request");
 }
 

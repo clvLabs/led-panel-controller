@@ -8,6 +8,9 @@ struct _EEPROMConfigData
 
 	// Default dim level
 	uint8_t defaultDimLevel;
+
+  // Fade speed
+  uint8_t fadeSpeed;
 };
 
 

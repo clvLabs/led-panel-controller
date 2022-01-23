@@ -8,6 +8,7 @@ class MQTT
 public:
   std::function< void(uint8_t) > onChangeLevel;
   std::function< void(uint8_t) > onChangeDefault;
+  std::function< void(uint8_t) > onChangeFadeSpeed;
 
   MQTT();
   ~MQTT();
@@ -36,5 +37,6 @@ private:
   void onMQTT_do_reboot(uint8_t* payload, unsigned int length);
   void onMQTT_set_level(uint8_t* payload, unsigned int length);
   void onMQTT_set_default(uint8_t* payload, unsigned int length);
+  void onMQTT_set_fade_speed(uint8_t* payload, unsigned int length);
   String getStatusMsg();
 };

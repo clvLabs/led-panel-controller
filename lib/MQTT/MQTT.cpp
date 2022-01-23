@@ -5,6 +5,7 @@
 MQTT::MQTT()
 : onChangeLevel(nullptr)
 , onChangeDefault(nullptr)
+, onChangeFadeSpeed(nullptr)
 , mMQTTClient(PubSubClient(mWiFiClient))
 , mbStarted(false)
 , mbConnected(false)
@@ -103,6 +104,8 @@ void MQTT::onMQTTMessage(char* topic, uint8_t* payload, unsigned int length) {
     onMQTT_set_level(payload, length);
   else if (!strncmp(subtopic, "/set/default", 12))
     onMQTT_set_default(payload, length);
+  else if (!strncmp(subtopic, "/set/fade-speed", 15))
+    onMQTT_set_fade_speed(payload, length);
   else {
     Serial.print("[MQTT] UNKNOWN Message arrived [");
     Serial.print(topic);
@@ -210,6 +213,23 @@ void MQTT::onMQTT_set_default(uint8_t* payload, unsigned int length) {
     onChangeDefault(level);
 }
 
+void MQTT::onMQTT_set_fade_speed(uint8_t* payload, unsigned int length) {
+  if (length > 3) { // Ignore "strange" requests
+    Serial.println("[MQTT] IGNORING set/fade-speed - payload TOO LARGE");
+    return;
+  }
+  char buffer[5];
+  memcpy((void*)buffer, (void*)payload, length);
+  buffer[length] = 0;
+
+  Serial.print("[MQTT] Received set/fade-speed - payload: ");
+  Serial.println(buffer);
+  uint8_t level = (uint8_t)atoi(buffer);
+
+  if (onChangeFadeSpeed)
+    onChangeFadeSpeed(level);
+}
+
 
 String MQTT::getStatusMsg() {
   String str = "";
@@ -221,6 +241,9 @@ String MQTT::getStatusMsg() {
   str +=      ",";
   str +=      "\"default\": ";
   str +=        mState->mLightLevel.miDefault;
+  str +=      ",";
+  str +=      "\"fadeSpeed\": ";
+  str +=        mState->mLightLevel.miFadeSpeed;
   str +=    "},";
   str +=    "\"network\": {";
   str +=      "\"rssi\": ";

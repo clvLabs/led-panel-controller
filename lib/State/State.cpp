@@ -6,6 +6,7 @@ State::State()
 {
   mLightLevel.miCurrent = 0;
   mLightLevel.miDefault = 0;
+  mLightLevel.miFadeSpeed = 0;
 
   mNetwork.msSSID = WIFI_SSID;
   mNetwork.mbConnected = false;

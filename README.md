@@ -26,6 +26,7 @@ Besides that, the controller accepts a few `GET` routes:
 * `http://led-panel-1.local/do/reboot`: Reboot the module.
 * `http://led-panel-1.local/set/level?value=75`: Turn the light on at 75%.
 * `http://led-panel-1.local/set/default?value=50`: Set the default level (for startup) at 50%.
+* `http://led-panel-1.local/set/fade-speed?value=5`: Set the fade speed at 5.
 
 ### MQTT
 
@@ -35,6 +36,7 @@ The device will publish its state every second in the `MDNS_NAME/MQTT_STATUS_TOP
     "lightLevel": {
       "current": 75,
       "default": 100,
+      "fadeSpeed": 3,
     },
     "network": {
       "rssi": -59
@@ -63,6 +65,7 @@ As with the Web server, other `topics` are available to control the module:
 * `led-panel-1/do/reboot`
 * `led-panel-1/set/level` (value must be sent as payload)
 * `led-panel-1/set/default` (value must be sent as payload)
+* `led-panel-1/set/fade-speed` (value must be sent as payload)
 
 ## Setup
 
@@ -96,6 +99,7 @@ $ cp platformio.sample.ini platformio.ini
 * `RELAY_FASTEST_CHANGE`: minimum time (ms) between relay changes (_throttling_).
 * `PWM_DIM_PIN`: `ESP8266 GPIO` pin to use for the `PWM` dimmer.
 * `PWM_ON_THRESHOLD`: Maximum `PWM` value that makes the LED Panel driver turn the light ON (see comment in `Dimmer.cpp`).
+* `PWM_DEFAULT_FADE_SPEED`: Default fade speed (`1` slowest / `99` fastest / `0` instantaneous)
 * `PWM_FASTEST_CHANGE`: minimum time (ms) between `PWM` changes (_throttling_).
 * `DEMO_JUMPER_PIN`: `ESP8266 GPIO` pin to use for the `demo mode`.
 

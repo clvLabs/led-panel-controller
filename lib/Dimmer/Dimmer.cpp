@@ -19,9 +19,13 @@
 Dimmer::Dimmer()
 : miPin(PWM_DIM_PIN)
 , miLevel(0)
-, miLastStateChange(0)
+, miFadeLevel(0)
+, miFadeSpeed(0)
+, miLastPWMChange(0)
 , mbThrottledValueWaiting(false)
+, mbThrottledWaitingFade(false)
 , miThrottledValue(0)
+, miThrottledSpeed(0)
 {}
 
 Dimmer::~Dimmer() {}
@@ -31,9 +35,36 @@ void Dimmer::start() {
 }
 
 void Dimmer::loop() {
-  if (mbThrottledValueWaiting && miLastStateChange + PWM_FASTEST_CHANGE <= millis()) {
+  if (mbThrottledValueWaiting && miLastPWMChange + PWM_FASTEST_CHANGE <= millis()) {
     mbThrottledValueWaiting = false;
-    setLevel(miThrottledValue);
+
+    if (mbThrottledWaitingFade) {
+      mbThrottledWaitingFade = false;
+      fade(miThrottledValue, miThrottledSpeed);
+    } else {
+      setLevel(miThrottledValue);
+    }
+  }
+
+  if (miFadeLevel != miLevel) {
+    if (miLastPWMChange + PWM_FASTEST_CHANGE < millis()) {
+      if (miFadeLevel < miLevel) {
+        // Fading up
+        if (miFadeLevel + miFadeSpeed > miLevel) {
+          miFadeLevel = miLevel;
+        } else {
+          miFadeLevel += miFadeSpeed;
+        }
+      } else {
+        // Fading down
+        if (miLevel + miFadeSpeed > miFadeLevel) {
+          miFadeLevel = miLevel;
+        } else {
+          miFadeLevel -= miFadeSpeed;
+        }
+      }
+      _updatePWM(miFadeLevel);
+    }
   }
 }
 
@@ -41,24 +72,54 @@ void Dimmer::setLevel(uint8_t level) {
   if (level > 100)
     level = 100;
 
-  if (miLastStateChange + PWM_FASTEST_CHANGE > millis()) {
+  if (level == miLevel)
+    return;
+
+  if (miLastPWMChange + PWM_FASTEST_CHANGE > millis()) {
     mbThrottledValueWaiting = true;
+    mbThrottledWaitingFade = false;
     miThrottledValue = level;
     return;
   }
 
+  miFadeLevel = level;
   miLevel = level;
-  miLastStateChange = millis();
 
+  _updatePWM(level);
+}
+
+void Dimmer::fade(uint8_t level, uint8_t speed) {
+  if (level > 100)
+    level = 100;
+
+  if (level == miLevel)
+    return;
+
+  if (miLastPWMChange + PWM_FASTEST_CHANGE > millis()) {
+    mbThrottledValueWaiting = true;
+    mbThrottledWaitingFade = true;
+    miThrottledValue = level;
+    miThrottledSpeed = speed;
+    return;
+  }
+
+  miFadeLevel = miLevel;
+  miLevel = level;
+  miFadeSpeed = speed;
+}
+
+void Dimmer::_updatePWM(uint8_t level) {
   uint8_t pwmLevel = 0;
 
-  if (miLevel == 0) {
+  if (level == 0) {
     digitalWrite(miPin, HIGH);
-  } else if (miLevel == 100) {
+  } else if (level == 100) {
     digitalWrite(miPin, LOW);
   } else {
     // We have 99 dim levels between PWM_ON_THRESHOLD and 0
-    pwmLevel = PWM_ON_THRESHOLD - ( PWM_ON_THRESHOLD * (miLevel-1) / 99 );
+    pwmLevel = PWM_ON_THRESHOLD - ( PWM_ON_THRESHOLD * (level-1) / 99 );
     analogWrite(miPin, pwmLevel);
   }
+
+  miLastPWMChange = millis();
 }

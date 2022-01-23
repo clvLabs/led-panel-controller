@@ -36,5 +36,8 @@ void Panel::setLevel(uint8_t level) {
     mRelay.on();
   }
 
-  mDimmer.setLevel(level);
+  if (mState && mState->mLightLevel.miFadeSpeed > 0)
+    mDimmer.fade(level, mState->mLightLevel.miFadeSpeed);
+  else
+    mDimmer.setLevel(level);
 }

@@ -17,6 +17,7 @@ void LEDPanelController::start() {
   mEEPROMCfg.read();
   mState.mLightLevel.miDefault = mEEPROMCfg.data.defaultDimLevel;
   mState.mLightLevel.miCurrent = mEEPROMCfg.data.defaultDimLevel;
+  mState.mLightLevel.miFadeSpeed = mEEPROMCfg.data.fadeSpeed;
   mPanel.start(&mState);
 
   mStatusLED.start();
@@ -36,9 +37,11 @@ void LEDPanelController::start() {
 
   mWebServer.onChangeLevel = std::bind(&LEDPanelController::onWebServerChangeLevel, this, std::placeholders::_1);
   mWebServer.onChangeDefault = std::bind(&LEDPanelController::onWebServerChangeDefault, this, std::placeholders::_1);
+  mWebServer.onChangeFadeSpeed = std::bind(&LEDPanelController::onWebServerChangeFadeSpeed, this, std::placeholders::_1);
 
   mMQTT.onChangeLevel = std::bind(&LEDPanelController::onMQTTChangeLevel, this, std::placeholders::_1);
   mMQTT.onChangeDefault = std::bind(&LEDPanelController::onMQTTChangeDefault, this, std::placeholders::_1);
+  mMQTT.onChangeFadeSpeed = std::bind(&LEDPanelController::onMQTTChangeFadeSpeed, this, std::placeholders::_1);
 }
 
 void LEDPanelController::loop() {
@@ -172,6 +175,15 @@ void LEDPanelController::onChangeDefault(uint8_t level) {
   mStatusLED.commandReceived();
 }
 
+void LEDPanelController::onChangeFadeSpeed(uint8_t speed) {
+  if (speed == mState.mLightLevel.miFadeSpeed)
+    return;
+
+  mState.mLightLevel.miFadeSpeed = speed;
+  mEEPROMCfg.write();
+  mStatusLED.commandReceived();
+}
+
 void LEDPanelController::onWebServerChangeLevel(uint8_t level) {
   onChangeLevel(level);
 }
@@ -180,10 +192,18 @@ void LEDPanelController::onWebServerChangeDefault(uint8_t level) {
   onChangeDefault(level);
 }
 
+void LEDPanelController::onWebServerChangeFadeSpeed(uint8_t level) {
+  onChangeFadeSpeed(level);
+}
+
 void LEDPanelController::onMQTTChangeLevel(uint8_t level) {
   onChangeLevel(level);
 }
 
 void LEDPanelController::onMQTTChangeDefault(uint8_t level) {
   onChangeDefault(level);
+}
+
+void LEDPanelController::onMQTTChangeFadeSpeed(uint8_t level) {
+  onChangeFadeSpeed(level);
 }

@@ -8,6 +8,7 @@ class WebServer
 public:
   std::function< void(uint8_t) > onChangeLevel;
   std::function< void(uint8_t) > onChangeDefault;
+  std::function< void(uint8_t) > onChangeFadeSpeed;
 
   WebServer();
   ~WebServer();
@@ -32,4 +33,5 @@ private:
   void handlePresetLevel(const char* route, uint8_t level);
   void handleLevel();
   void handleDefault();
+  void handleFadeSpeed();
 };
