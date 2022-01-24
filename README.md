@@ -4,6 +4,15 @@ WiFi controller for LED panel fixtures.
 
 **NOTE: this project is still at its initial development stage.**
 
+## Features
+* Dual web/`MQTT` control interface.
+* Open Source Hardware (schematics, PCB layout, BOM and enclosure design included).
+* Status LED.
+* Quick _demo_ mode for installation.
+* Serial output debug log for troubleshooting (thru the `ESP8266` USB port).
+* No extra power source needed, uses the same power as the LED panel.
+* Completely cuts power to the LED panel when set to 0% light intensity (using an SPDT Latching relay).
+
 ## Usage
 
 ### Web interface
