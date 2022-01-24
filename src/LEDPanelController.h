@@ -22,20 +22,11 @@ public:
 private:
   void onNetworkConnect();
   void onNetworkDisconnect();
+  void onDemoStarted();
 
   void onChangeLevel(uint8_t level);
   void onChangeDefault(uint8_t level);
   void onChangeFadeSpeed(uint8_t speed);
-
-  void onWebServerChangeLevel(uint8_t level);
-  void onWebServerChangeDefault(uint8_t level);
-  void onWebServerChangeFadeSpeed(uint8_t speed);
-
-  void onMQTTChangeLevel(uint8_t level);
-  void onMQTTChangeDefault(uint8_t level);
-  void onMQTTChangeFadeSpeed(uint8_t speed);
-
-  void onDemoStarted();
 
   EEPROMConfig mEEPROMCfg;
   StatusLED mStatusLED;

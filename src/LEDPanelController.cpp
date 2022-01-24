@@ -27,13 +27,13 @@ void LEDPanelController::start() {
   mNetwork.onDisconnect = std::bind(&LEDPanelController::onNetworkDisconnect, this);
   mNetwork.start(&mState);
 
-  mWebServer.onChangeLevel = std::bind(&LEDPanelController::onWebServerChangeLevel, this, std::placeholders::_1);
-  mWebServer.onChangeDefault = std::bind(&LEDPanelController::onWebServerChangeDefault, this, std::placeholders::_1);
-  mWebServer.onChangeFadeSpeed = std::bind(&LEDPanelController::onWebServerChangeFadeSpeed, this, std::placeholders::_1);
+  mWebServer.onChangeLevel = std::bind(&LEDPanelController::onChangeLevel, this, std::placeholders::_1);
+  mWebServer.onChangeDefault = std::bind(&LEDPanelController::onChangeDefault, this, std::placeholders::_1);
+  mWebServer.onChangeFadeSpeed = std::bind(&LEDPanelController::onChangeFadeSpeed, this, std::placeholders::_1);
 
-  mMQTT.onChangeLevel = std::bind(&LEDPanelController::onMQTTChangeLevel, this, std::placeholders::_1);
-  mMQTT.onChangeDefault = std::bind(&LEDPanelController::onMQTTChangeDefault, this, std::placeholders::_1);
-  mMQTT.onChangeFadeSpeed = std::bind(&LEDPanelController::onMQTTChangeFadeSpeed, this, std::placeholders::_1);
+  mMQTT.onChangeLevel = std::bind(&LEDPanelController::onChangeLevel, this, std::placeholders::_1);
+  mMQTT.onChangeDefault = std::bind(&LEDPanelController::onChangeDefault, this, std::placeholders::_1);
+  mMQTT.onChangeFadeSpeed = std::bind(&LEDPanelController::onChangeFadeSpeed, this, std::placeholders::_1);
 
   mDemoManager.onDemoStarted = std::bind(&LEDPanelController::onDemoStarted, this);
   mDemoManager.onChangeLevel = std::bind(&LEDPanelController::onChangeLevel, this, std::placeholders::_1);
@@ -78,6 +78,10 @@ void LEDPanelController::onChangeLevel(uint8_t level) {
     mStatusLED.commandReceived();
 }
 
+void LEDPanelController::onDemoStarted() {
+  mStatusLED.demoActive();
+}
+
 void LEDPanelController::onChangeDefault(uint8_t level) {
   if (level == mState.mLightLevel.miDefault)
     return;
@@ -95,32 +99,4 @@ void LEDPanelController::onChangeFadeSpeed(uint8_t speed) {
   mState.mLightLevel.miFadeSpeed = speed;
   mEEPROMCfg.write();
   mStatusLED.commandReceived();
-}
-
-void LEDPanelController::onWebServerChangeLevel(uint8_t level) {
-  onChangeLevel(level);
-}
-
-void LEDPanelController::onWebServerChangeDefault(uint8_t level) {
-  onChangeDefault(level);
-}
-
-void LEDPanelController::onWebServerChangeFadeSpeed(uint8_t level) {
-  onChangeFadeSpeed(level);
-}
-
-void LEDPanelController::onMQTTChangeLevel(uint8_t level) {
-  onChangeLevel(level);
-}
-
-void LEDPanelController::onMQTTChangeDefault(uint8_t level) {
-  onChangeDefault(level);
-}
-
-void LEDPanelController::onMQTTChangeFadeSpeed(uint8_t level) {
-  onChangeFadeSpeed(level);
-}
-
-void LEDPanelController::onDemoStarted() {
-  mStatusLED.demoActive();
 }
