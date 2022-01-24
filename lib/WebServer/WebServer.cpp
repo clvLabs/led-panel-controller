@@ -74,13 +74,13 @@ void WebServer::handleHome() {
   page += "<button type='button' title='OFF' onclick='window.location = \"/do/off\";'>OFF</button>";
   page += "<p/>";
 
-  page += "<button type='button' title='lo' onclick='window.location = \"/do/lo\";'>1%</button>";
-  page += "<button type='button' title='med' onclick='window.location = \"/do/med\";'>50%</button>";
-  page += "<button type='button' title='hi' onclick='window.location = \"/do/hi\";'>100%</button>";
+  page += "<button type='button' title='1%' onclick='window.location = \"/do/lo\";'>1%</button>";
+  page += "<button type='button' title='50%' onclick='window.location = \"/do/med\";'>50%</button>";
+  page += "<button type='button' title='100%' onclick='window.location = \"/do/hi\";'>100%</button>";
   page += "<p/>";
 
-  page += "<button type='button' title='down' onclick='window.location = \"/do/down\";'>- 10%</button>";
-  page += "<button type='button' title='up' onclick='window.location = \"/do/up\";'>+ 10%</button>";
+  page += "<button type='button' title='-10%' onclick='window.location = \"/do/down\";'>-10%</button>";
+  page += "<button type='button' title='+10%' onclick='window.location = \"/do/up\";'>+10%</button>";
   page += "<p/>";
 
   page += "</body>";
