@@ -8,6 +8,7 @@
 #include "Panel.h"
 #include "State.h"
 #include "MQTT.h"
+#include "Demo.h"
 
 class LEDPanelController
 {
@@ -19,9 +20,6 @@ public:
   void loop();
 
 private:
-  void standardLoop();
-  void demoLoop();
-
   void onNetworkConnect();
   void onNetworkDisconnect();
 
@@ -37,6 +35,8 @@ private:
   void onMQTTChangeDefault(uint8_t level);
   void onMQTTChangeFadeSpeed(uint8_t speed);
 
+  void onDemoStarted();
+
   EEPROMConfig mEEPROMCfg;
   StatusLED mStatusLED;
   Network mNetwork;
@@ -44,11 +44,5 @@ private:
   Panel mPanel;
   State mState;
   MQTT mMQTT;
-
-  unsigned long miNextDemoCheck;
-  unsigned long miNextDemoRSSI;
-  bool mbDemoActive;
-  uint8_t miDemoPhase;
-  uint8_t miDemoIteration;
-  bool mbDemoRampingUp;
+  Demo mDemoManager;
 };
