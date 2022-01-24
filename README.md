@@ -58,6 +58,7 @@ The device will publish its state every second in the `MDNS_NAME/MQTT_STATUS_TOP
 * `lightLevel`: light dimmer status
   * `current`: current level
   * `default`: default level
+  * `fadeSpeed`: current fade speed
 * `network`: network connection status
   * `rssi`: current RSSI value
 * `misc`: miscellaneous status
